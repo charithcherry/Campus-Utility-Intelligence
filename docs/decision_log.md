@@ -51,3 +51,5 @@ Reusable analytics questions live in `sql/marts/` instead of being embedded only
 NMI readings include `campus_id` and `meter_id`, but not `building_id`. Reconciliation compares campus-level NMI totals against summed campus-level building meter totals.
 
 Differences are treated as diagnostics, not automatic corruption, because NMI and building meters may have different coverage.
+
+The dataset can quantify NMI/building differences, but it cannot directly attribute those differences to specific load categories such as street lighting or outdoor infrastructure because those labels are not present in the current reconciliation inputs.

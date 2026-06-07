@@ -73,6 +73,8 @@ Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, 
 | `gold.gold_daily_nmi_building_reconciliation` | Campus and date | Daily NMI usage compared with summed building usage |
 | `gold.gold_monthly_nmi_building_reconciliation` | Campus and month | Monthly NMI usage compared with summed building usage |
 
+Reconciliation columns include NMI consumption, building consumption, absolute difference, and difference ratio to NMI. They do not identify the physical cause of the difference.
+
 ## SQL Analytics Outputs
 
 | Query | Purpose |
