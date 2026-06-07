@@ -189,7 +189,7 @@ def write_emissions_report(table: EmissionsTable, db_path: Path, output_path: Pa
         "",
         "## Assumption",
         "",
-        "Emissions are estimates, not official carbon accounting results. Default factors are demo estimates unless replaced by user-provided reference data.",
+        "Emissions are estimates, not official carbon accounting results. Default factors are documented reference factors used when no more specific source/year factor is available.",
         "",
         f"DuckDB database: `{db_path}`",
         "",

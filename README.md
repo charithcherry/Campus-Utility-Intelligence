@@ -109,7 +109,7 @@ By default, emissions factors are loaded from `data/reference/emissions_factors_
 CAMPUS_EMISSIONS_FACTORS_PATH=/path/to/factors.csv make emissions
 ```
 
-For a verified Australia factor, use an official source such as DCCEEW's National Greenhouse Accounts Factors and load it through the CSV workflow. The included factor is only a demo fallback estimate.
+The included reference factor is the DCCEEW 2025 National Greenhouse Accounts Factors Victoria location-based purchased electricity Scope 2 factor: `0.78 kg CO2-e/kWh`. It excludes the related Scope 3 factor.
 
 Run SQL analytics queries:
 
@@ -149,7 +149,7 @@ The profiling workflow currently supports `.csv`, `.json`, `.jsonl`, and `.parqu
 
 ## Known Limitations
 
-Estimated emissions use configurable reference factors. The included factor is a demo estimate and should be replaced if an official project-specific factor is required. The dashboard is local only and is not deployed.
+Estimated emissions use configurable reference factors. The included factor is an official DCCEEW Victoria Scope 2 electricity factor, but it should still be reviewed before formal reporting. The dashboard is local only and is not deployed.
 
 ## Final Review
 

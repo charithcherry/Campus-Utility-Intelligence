@@ -44,11 +44,13 @@ The default value is `0.79` kg CO2e per usage unit. This is treated as a configu
 
 ## 2026-06-07: Load emissions factors from reference data
 
-Feature 11 replaces the single numeric-only emissions factor workflow with a CSV-backed reference table. The included CSV has a demo Australia fallback estimate and must be replaced for formal reporting.
+Feature 11 replaces the single numeric-only emissions factor workflow with a CSV-backed reference table. The included CSV uses the DCCEEW 2025 National Greenhouse Accounts Factors Victoria location-based purchased electricity Scope 2 factor of `0.78 kg CO2-e/kWh`.
 
 Factor selection prefers source-specific matches over wildcard matches and exact-year factors over older factors. Missing source-specific factors fall back to a documented default factor when available.
 
-The preferred official source for a static Australia factor is DCCEEW's National Greenhouse Accounts Factors. Time-varying grid emissions intensity may be considered later with sources such as Open Electricity or CSIRO. The repository does not ship verified official factor values.
+The preferred official source for a static Australia factor is DCCEEW's National Greenhouse Accounts Factors. Time-varying grid emissions intensity may be considered later with sources such as Open Electricity or CSIRO. The repository currently ships a verified DCCEEW Victoria Scope 2 factor, not CSIRO or Open Electricity data.
+
+The DCCEEW 2025 Victoria Scope 2 factor is used as the project default across historical usage years because year-specific historical factors are not included in the repository.
 
 ## 2026-06-06: Store analytics queries as SQL files
 

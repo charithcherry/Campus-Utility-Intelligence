@@ -21,7 +21,7 @@ Load configurable emissions factor reference data and store factor metadata in t
 
 ## Implementation Details
 
-The emissions workflow now loads factors from `data/reference/emissions_factors_example.csv` by default. The workflow creates `reference.reference_emissions_factors` and joins monthly electricity usage to the best available factor.
+The emissions workflow now loads factors from `data/reference/emissions_factors_example.csv` by default. The current reference file uses the DCCEEW 2025 National Greenhouse Accounts Factors Victoria location-based purchased electricity Scope 2 factor of `0.78 kg CO2-e/kWh`.
 
 Selection prefers source-specific factors over wildcard factors and exact-year factors over older factors. If no source-specific factor exists, the workflow uses a documented default factor where available.
 
@@ -51,7 +51,7 @@ make emissions
 
 ## Known Limitations
 
-The included factor is a demo estimate, not an official project-specific emissions factor. Emissions are estimates and should not be treated as carbon accounting compliance results.
+The included factor is official DCCEEW reference data, but emissions are still estimates and should not be treated as carbon accounting compliance results. The current file uses Scope 2 only, excludes the related Victoria Scope 3 factor of `0.09 kg CO2-e/kWh`, and applies the 2025 factor as the project default across historical usage years.
 
 ## Recommended Factor Sources
 
@@ -59,7 +59,7 @@ The preferred source for static Australia emissions factors is Australia's Natio
 
 For more advanced time-varying grid emissions intensity, future work can evaluate sources such as Open Electricity or CSIRO. Open Electricity documents emissions as energy generated multiplied by an emissions intensity factor and provides Australian grid emissions data. CSIRO has datasets for consumption-based emissions intensity estimates for National Electricity Market regions.
 
-The project should not invent official values. Users should provide a factor CSV when they want a verified source-specific factor.
+The project should not invent official values. Users should provide or update the factor CSV when they want a different region, year, scope, or source-specific factor.
 
 ## Next Steps
 
