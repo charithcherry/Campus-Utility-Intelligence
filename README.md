@@ -27,6 +27,24 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Gemini tool-calling analytics copilot with project-doc retrieval, safe read-only DuckDB SQL tools, table inspection tools, and local fallback
 - Multi-page local Streamlit dashboard for executive KPIs, usage patterns, emissions, weather-normalized efficiency, peak-shift simulation, demand-response readiness, analytics copilot, reconciliation, data quality, and methodology notes
 
+## Dashboard Screenshots
+
+### Executive Overview
+
+![Executive overview dashboard](images/overview_page.png)
+
+### Usage Patterns
+
+![Usage patterns dashboard](images/usage_pattern.png)
+
+### Weather-Normalized Efficiency
+
+![Weather-normalized efficiency dashboard](images/weather_normalised_efficiency.png)
+
+### Analytics Copilot
+
+![Analytics copilot dashboard](images/analytics_copilot.png)
+
 ## Project Layout
 
 ```text
