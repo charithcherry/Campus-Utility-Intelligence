@@ -37,7 +37,8 @@ Current limitation: emissions use a static factor. Same-day peak shifting does n
 
 1. Feature 16: Time-Varying Carbon Intensity Layer: implemented
 2. Feature 17: Demand-Response Event Simulator: implemented
-3. Stop for review before considering forecasting, anomaly workbench, or RAG
+3. Feature 18: Demand-Response Dashboard and Scenario Polish: implemented
+4. Stop for Final Review Phase 3 before considering forecasting, anomaly workbench, or RAG
 
 ## Feature 16: Time-Varying Carbon Intensity Layer
 
@@ -133,7 +134,33 @@ Suggested commit:
 feat: add demand-response event simulator
 ```
 
-## Feature 18: Forecasting And Peak-Risk Alerts
+## Feature 18: Demand-Response Dashboard And Scenario Polish
+
+Status: implemented.
+
+Goal: make demand-response simulation visible in the Streamlit dashboard and clarify the scenario assumptions behind the results.
+
+Implemented behavior:
+
+- Added a `Grid Event Readiness` dashboard page.
+- Shows simulated events, events meeting target, target achievement rate, achieved reduction, unmet reduction, rebound load, energy preservation failures, and negative load failures.
+- Adds a load comparison chart for baseline event load, simulated event load, and rebound load.
+- Updates the report with default target, flexible-load, and rebound assumptions.
+- Clearly labels the output as offline simulation, not real operational proof.
+
+Command:
+
+```bash
+make dashboard
+```
+
+Suggested commit:
+
+```text
+feat: add demand-response dashboard views
+```
+
+## Feature 19: Forecasting And Peak-Risk Alerts
 
 Status: planned.
 
@@ -168,7 +195,7 @@ Suggested commit:
 feat: add peak-risk forecasting baseline
 ```
 
-## Feature 19: Energy Anomaly Investigation
+## Feature 20: Energy Anomaly Investigation
 
 Status: planned.
 

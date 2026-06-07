@@ -2,6 +2,8 @@ import duckdb
 
 from campus_utility.dashboard_data import (
     get_filter_options,
+    load_demand_response_load_comparison,
+    load_demand_response_summary,
     load_emissions,
     load_emissions_assumptions,
     load_executive_summary,
@@ -14,6 +16,7 @@ from campus_utility.dashboard_data import (
     load_pipeline_row_counts,
     load_quality_check_summary,
     load_top_peak_shift_results,
+    load_top_demand_response_results,
     load_temperature_usage_sample,
     load_top_usage_entities,
     load_top_weather_baseline_candidates,
@@ -47,6 +50,9 @@ def test_dashboard_data_helpers_load_expected_frames(tmp_path):
     shift_comparison = load_peak_shift_scenario_comparison(db_path, campuses, sources)
     shift_summary = load_peak_shift_summary(db_path, campuses, 0.10)
     shift_results = load_top_peak_shift_results(db_path, campuses, 0.10)
+    demand_summary = load_demand_response_summary(db_path, campuses, sources)
+    demand_load_comparison = load_demand_response_load_comparison(db_path, campuses, sources)
+    demand_results = load_top_demand_response_results(db_path, campuses, sources)
     row_counts = load_pipeline_row_counts(db_path)
     quality_summary = load_quality_check_summary(db_path)
 
@@ -71,6 +77,10 @@ def test_dashboard_data_helpers_load_expected_frames(tmp_path):
     assert shift_comparison["valid_scenarios"].iloc[0] == 1
     assert shift_summary["avg_peak_reduction"].iloc[0] == 10.0
     assert shift_results["total_energy_preserved"].iloc[0]
+    assert demand_summary["simulated_events"].iloc[0] == 1
+    assert demand_summary["target_achievement_rate"].iloc[0] == 1.0
+    assert demand_load_comparison["total_consumption"].sum() == 400.0
+    assert demand_results["achieved_reduction"].iloc[0] == 30.0
     assert row_counts["row_count"].sum() > 0
     assert quality_summary.empty
 
@@ -228,5 +238,39 @@ def _create_dashboard_test_database(db_path):
             INSERT INTO gold.gold_peak_shift_simulation VALUES
             (1, 'building_consumption', 10, NULL, '2024-01-01', 0.10,
              100.0, 90.0, 10.0, 0.10, TRUE, FALSE, 'Static factor emissions unchanged')
+            """
+        )
+        connection.execute(
+            """
+            CREATE TABLE gold.gold_demand_response_simulation (
+                campus_id BIGINT,
+                source_system VARCHAR,
+                meter_id BIGINT,
+                building_id BIGINT,
+                event_date DATE,
+                start_hour BIGINT,
+                end_hour BIGINT,
+                target_reduction_percent DOUBLE,
+                flexible_load_percent DOUBLE,
+                rebound_window_hours BIGINT,
+                baseline_event_consumption DOUBLE,
+                simulated_event_consumption DOUBLE,
+                target_reduction DOUBLE,
+                achieved_reduction DOUBLE,
+                unmet_reduction DOUBLE,
+                target_met BOOLEAN,
+                rebound_load DOUBLE,
+                total_energy_preserved BOOLEAN,
+                negative_load_created BOOLEAN,
+                notes VARCHAR
+            )
+            """
+        )
+        connection.execute(
+            """
+            INSERT INTO gold.gold_demand_response_simulation VALUES
+            (1, 'building_consumption', 10, NULL, '2024-01-01', 15, 18, 0.10, 0.15,
+             3, 200.0, 170.0, 20.0, 30.0, 0.0, TRUE, 30.0, TRUE, FALSE,
+             'Offline simulation only')
             """
         )

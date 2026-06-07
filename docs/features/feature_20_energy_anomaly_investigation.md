@@ -1,4 +1,4 @@
-# Feature 19: Energy Anomaly Investigation
+# Feature 20: Energy Anomaly Investigation
 
 ## Goal
 
@@ -16,7 +16,7 @@ Planned. This feature is not implemented yet.
 - `tests/test_anomaly_investigation.py`
 - `docs/data_dictionary.md`
 - `docs/decision_log.md`
-- `docs/features/feature_19_energy_anomaly_investigation.md`
+- `docs/features/feature_20_energy_anomaly_investigation.md`
 - `README.md`
 - `Makefile`
 
@@ -71,4 +71,4 @@ make anomalies
 
 ## Next Steps
 
-Consider after Feature 16 or Feature 17 if anomaly investigation becomes the priority.
+Consider only after Final Review Phase 3 if anomaly investigation becomes the priority.

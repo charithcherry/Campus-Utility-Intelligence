@@ -7,6 +7,8 @@ import streamlit as st
 from campus_utility.config import get_config
 from campus_utility.dashboard_data import (
     get_filter_options,
+    load_demand_response_load_comparison,
+    load_demand_response_summary,
     load_emissions,
     load_emissions_assumptions,
     load_executive_summary,
@@ -19,6 +21,7 @@ from campus_utility.dashboard_data import (
     load_reconciliation,
     load_temperature_usage_sample,
     load_top_peak_shift_results,
+    load_top_demand_response_results,
     load_top_usage_entities,
     load_top_weather_baseline_candidates,
     load_weather_actual_expected_trend,
@@ -65,6 +68,7 @@ pages = [
     "Emissions",
     "Weather-Normalized Efficiency",
     "Peak-Shifting Simulator",
+    "Grid Event Readiness",
     "NMI/Building Reconciliation",
     "Data Quality",
     "Methodology and Assumptions",
@@ -81,6 +85,7 @@ if not selected_campuses or not selected_sources:
 
 has_baseline = table_exists(config.db_path, "gold", "gold_weather_normalized_usage")
 has_peak_shift = table_exists(config.db_path, "gold", "gold_peak_shift_simulation")
+has_demand_response = table_exists(config.db_path, "gold", "gold_demand_response_simulation")
 
 if page == "Executive Overview":
     st.subheader("Executive Overview")
@@ -263,6 +268,57 @@ elif page == "Peak-Shifting Simulator":
     else:
         st.info("Peak-shift simulation table not found. Run `make simulate-shift`.")
 
+elif page == "Grid Event Readiness":
+    st.subheader("Grid Event Readiness")
+    st.caption(
+        "Offline demand-response simulation only. This is not production optimization, "
+        "real-time grid control, or proof of utility program participation."
+    )
+    if has_demand_response:
+        demand_summary = load_demand_response_summary(config.db_path, selected_campuses, selected_sources)
+        load_comparison = load_demand_response_load_comparison(
+            config.db_path, selected_campuses, selected_sources
+        )
+        top_results = load_top_demand_response_results(config.db_path, selected_campuses, selected_sources)
+
+        totals = demand_summary.sum(numeric_only=True)
+        simulated_events = totals.get("simulated_events", 0)
+        events_meeting_target = totals.get("events_meeting_target", 0)
+        target_achievement_rate = events_meeting_target / simulated_events if simulated_events else 0
+
+        kpi_cols = st.columns(4)
+        kpi_cols[0].metric("Simulated Events", f"{simulated_events:,.0f}")
+        kpi_cols[1].metric("Events Meeting Target", f"{events_meeting_target:,.0f}")
+        kpi_cols[2].metric("Target Achievement Rate", f"{target_achievement_rate:.1%}")
+        kpi_cols[3].metric("Rebound Load", compact_number(totals.get("rebound_load", 0), " kWh"))
+
+        check_cols = st.columns(4)
+        check_cols[0].metric("Achieved Reduction", compact_number(totals.get("achieved_reduction", 0), " kWh"))
+        check_cols[1].metric("Unmet Reduction", compact_number(totals.get("unmet_reduction", 0), " kWh"))
+        check_cols[2].metric(
+            "Energy Preservation Failures",
+            f"{totals.get('energy_preservation_failures', 0):,.0f}",
+        )
+        check_cols[3].metric("Negative Load Failures", f"{totals.get('negative_load_failures', 0):,.0f}")
+
+        st.markdown("#### Event load comparison")
+        st.bar_chart(load_comparison, x="load_component", y="total_consumption")
+        render_caption(
+            "Compares baseline event-window load, simulated event-window load, and rebound load. "
+            "The default target is intentionally feasible, so 100% target achievement should be read as a scenario result, not real operational proof."
+        )
+
+        st.markdown("#### Scenario settings")
+        st.dataframe(demand_summary, width="stretch", hide_index=True)
+        render_caption(
+            "Current output reflects the configured event date, reduction target, flexible-load assumption, and rebound window."
+        )
+
+        st.markdown("#### Top simulated reductions")
+        st.dataframe(top_results, width="stretch", hide_index=True)
+    else:
+        st.info("Demand-response simulation table not found. Run `make demand-response`.")
+
 elif page == "NMI/Building Reconciliation":
     st.subheader("NMI/Building Reconciliation")
     reconciliation = load_reconciliation(config.db_path, selected_campuses)
@@ -310,6 +366,9 @@ else:
 
         Peak shifting is an offline simulation. It preserves same-day total kWh and does not claim emissions
         reduction while the emissions factor is static.
+
+        Demand-response readiness is an offline event simulation. It uses assumed flexible load and rebound behavior;
+        it is not proof of real operational flexibility or demand-response program participation.
 
         NMI readings are campus-level readings. Building readings are not expected to always equal NMI readings
         because campus-level loads can include items not represented in building-level readings.

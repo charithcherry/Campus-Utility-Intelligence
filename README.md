@@ -24,7 +24,7 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Campus-level NMI versus building usage reconciliation
 - Weather-normalized electricity baseline and high-usage candidate scoring
 - Offline demand-response event simulation for grid-stress target reduction and rebound analysis
-- Multi-page local Streamlit dashboard for executive KPIs, usage patterns, emissions, weather-normalized efficiency, peak-shift simulation, reconciliation, data quality, and methodology notes
+- Multi-page local Streamlit dashboard for executive KPIs, usage patterns, emissions, weather-normalized efficiency, peak-shift simulation, demand-response readiness, reconciliation, data quality, and methodology notes
 
 ## Project Layout
 
@@ -176,7 +176,7 @@ Open the local dashboard:
 make dashboard
 ```
 
-The dashboard includes executive KPIs, usage patterns, emissions assumptions, NMI/building reconciliation, weather-normalized high-usage candidates, peak-shifting simulation views, data-quality context, and methodology notes.
+The dashboard includes executive KPIs, usage patterns, emissions assumptions, NMI/building reconciliation, weather-normalized high-usage candidates, peak-shifting simulation views, demand-response readiness, data-quality context, and methodology notes.
 
 Download the UNICON dataset from Kaggle:
 
@@ -204,4 +204,4 @@ See `docs/final_review.md` for the first end-to-end validation summary. See `doc
 
 See `docs/phase_3_plan.md` for planned grid-aware decision-support work.
 
-Optional next features are forecasting, anomaly investigation, or dashboard integration for demand-response outputs.
+Next step should be Final Review Phase 3. Optional later features are forecasting, anomaly investigation, or RAG/SQL copilot.

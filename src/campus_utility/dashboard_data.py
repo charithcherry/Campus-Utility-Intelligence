@@ -488,6 +488,117 @@ def load_peak_shift_scenario_comparison(db_path: Path, campus_ids: list[int], so
     )
 
 
+def load_demand_response_summary(db_path: Path, campus_ids: list[int], source_systems: list[str]) -> pd.DataFrame:
+    """Load demand-response readiness summary."""
+
+    return _query_dataframe(
+        db_path,
+        """
+        SELECT
+            event_date,
+            start_hour,
+            end_hour,
+            target_reduction_percent,
+            flexible_load_percent,
+            rebound_window_hours,
+            COUNT(*) AS simulated_events,
+            COUNT(*) FILTER (WHERE target_met) AS events_meeting_target,
+            COUNT(*) FILTER (WHERE target_met)::DOUBLE / COUNT(*) AS target_achievement_rate,
+            SUM(baseline_event_consumption) AS baseline_event_consumption,
+            SUM(simulated_event_consumption) AS simulated_event_consumption,
+            SUM(target_reduction) AS target_reduction,
+            SUM(achieved_reduction) AS achieved_reduction,
+            SUM(unmet_reduction) AS unmet_reduction,
+            SUM(rebound_load) AS rebound_load,
+            COUNT(*) FILTER (WHERE NOT total_energy_preserved) AS energy_preservation_failures,
+            COUNT(*) FILTER (WHERE negative_load_created) AS negative_load_failures
+        FROM gold.gold_demand_response_simulation
+        WHERE campus_id IN (SELECT UNNEST(?))
+          AND source_system IN (SELECT UNNEST(?))
+        GROUP BY
+            event_date,
+            start_hour,
+            end_hour,
+            target_reduction_percent,
+            flexible_load_percent,
+            rebound_window_hours
+        ORDER BY event_date, start_hour, target_reduction_percent
+        """,
+        [campus_ids, source_systems],
+    )
+
+
+def load_demand_response_load_comparison(db_path: Path, campus_ids: list[int], source_systems: list[str]) -> pd.DataFrame:
+    """Load demand-response baseline, simulated, and rebound load totals."""
+
+    return _query_dataframe(
+        db_path,
+        """
+        SELECT
+            'Baseline event load' AS load_component,
+            SUM(baseline_event_consumption) AS total_consumption
+        FROM gold.gold_demand_response_simulation
+        WHERE campus_id IN (SELECT UNNEST(?))
+          AND source_system IN (SELECT UNNEST(?))
+
+        UNION ALL
+
+        SELECT
+            'Simulated event load' AS load_component,
+            SUM(simulated_event_consumption) AS total_consumption
+        FROM gold.gold_demand_response_simulation
+        WHERE campus_id IN (SELECT UNNEST(?))
+          AND source_system IN (SELECT UNNEST(?))
+
+        UNION ALL
+
+        SELECT
+            'Rebound load' AS load_component,
+            SUM(rebound_load) AS total_consumption
+        FROM gold.gold_demand_response_simulation
+        WHERE campus_id IN (SELECT UNNEST(?))
+          AND source_system IN (SELECT UNNEST(?))
+        """,
+        [campus_ids, source_systems, campus_ids, source_systems, campus_ids, source_systems],
+    )
+
+
+def load_top_demand_response_results(db_path: Path, campus_ids: list[int], source_systems: list[str]) -> pd.DataFrame:
+    """Load top demand-response simulation rows by achieved reduction."""
+
+    return _query_dataframe(
+        db_path,
+        """
+        SELECT
+            campus_id,
+            source_system,
+            meter_id,
+            building_id,
+            event_date,
+            start_hour,
+            end_hour,
+            target_reduction_percent,
+            flexible_load_percent,
+            baseline_event_consumption,
+            simulated_event_consumption,
+            target_reduction,
+            achieved_reduction,
+            unmet_reduction,
+            target_met,
+            rebound_load,
+            total_energy_preserved,
+            negative_load_created,
+            notes
+        FROM gold.gold_demand_response_simulation
+        WHERE campus_id IN (SELECT UNNEST(?))
+          AND source_system IN (SELECT UNNEST(?))
+        ORDER BY achieved_reduction DESC
+        LIMIT 50
+        """,
+        [campus_ids, source_systems],
+    )
+
+
 def load_top_peak_shift_results(db_path: Path, campus_ids: list[int], flexible_load_percent: float) -> pd.DataFrame:
     """Load top peak-shift simulation results."""
 

@@ -1,4 +1,4 @@
-# Feature 18: Forecasting And Peak-Risk Alerts
+# Feature 19: Forecasting And Peak-Risk Alerts
 
 ## Goal
 
@@ -84,4 +84,4 @@ make forecast
 
 ## Next Steps
 
-Consider only after Feature 16 or Feature 17.
+Consider only after Final Review Phase 3 if forecasting becomes the priority.
