@@ -22,7 +22,7 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Reusable SQL analytics queries with markdown outputs
 - Campus-level NMI versus building usage reconciliation
 - Weather-normalized electricity baseline and high-usage candidate scoring
-- Local Streamlit dashboard for usage, peak demand, emissions, reconciliation, weather baseline, and peak-shift simulation
+- Multi-page local Streamlit dashboard for executive KPIs, usage patterns, emissions, weather-normalized efficiency, peak-shift simulation, reconciliation, data quality, and methodology notes
 
 ## Project Layout
 
@@ -150,7 +150,7 @@ Open the local dashboard:
 make dashboard
 ```
 
-The dashboard includes usage, peak demand, emissions assumptions, NMI/building reconciliation, weather-normalized high-usage candidates, and peak-shifting simulation views.
+The dashboard includes executive KPIs, usage patterns, emissions assumptions, NMI/building reconciliation, weather-normalized high-usage candidates, peak-shifting simulation views, data-quality context, and methodology notes.
 
 Download the UNICON dataset from Kaggle:
 
@@ -176,6 +176,6 @@ See `docs/final_review.md` for the first end-to-end validation summary. See `doc
 
 ## Future Work
 
-See `docs/phase_2_plan.md` and `docs/features/feature_15_dashboard_visualization_polish.md` for planned dashboard polish.
+See `docs/phase_2_plan.md` and `docs/features/feature_15_dashboard_visualization_polish.md` for the dashboard polish notes.
 
-Planned next improvement: a multi-page dashboard with executive KPIs, usage-pattern heatmaps, weather-normalized efficiency charts, peak-shift scenario comparisons, data-quality views, and clearer insight captions. This is planned work, not implemented yet.
+Optional next improvement: add Plotly/Altair charts, dashboard screenshots, and a queryable data-quality result table.

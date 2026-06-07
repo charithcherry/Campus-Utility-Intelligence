@@ -149,7 +149,7 @@ feat: extend dashboard with efficiency and simulation views
 
 Goal: improve the Streamlit dashboard presentation so it reads like an energy intelligence product without adding new backend pipeline tables.
 
-Status: planned after Phase 2 final review. This is not implemented yet.
+Status: implemented after Phase 2 final review.
 
 Expected behavior:
 

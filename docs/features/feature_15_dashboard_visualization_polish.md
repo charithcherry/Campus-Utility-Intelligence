@@ -12,22 +12,20 @@ What happened? -> Why did it happen? -> Is it abnormal? -> What can we do? -> Ca
 
 ## Status
 
-Planned. This feature is not implemented yet.
+Implemented.
 
 ## Expected Files To Change
+
+## Files Changed
 
 - `dashboard/app.py`
 - `src/campus_utility/dashboard_data.py`
 - `tests/test_dashboard_data.py`
 - `README.md`
+- `docs/phase_2_plan.md`
 - `docs/features/feature_15_dashboard_visualization_polish.md`
 
-Optional if screenshots are added:
-
-- `docs/assets/`
-- `README.md`
-
-## Expected Dashboard Structure
+## Dashboard Structure
 
 Use sidebar navigation with these pages:
 
@@ -40,9 +38,15 @@ Use sidebar navigation with these pages:
 - Data Quality
 - Methodology and Assumptions
 
+## Implementation Details
+
+The dashboard now uses sidebar navigation instead of a single tab row. It keeps the global campus/source filters and reads from existing DuckDB gold/reference tables only.
+
+No new backend pipeline tables were added.
+
 ## Executive Overview
 
-Add first-page KPI cards:
+Added first-page KPI cards:
 
 - Total electricity usage in kWh or MWh
 - Estimated Scope 2 emissions in tCO2e
@@ -50,9 +54,9 @@ Add first-page KPI cards:
 - High-usage candidate rate
 - Best simulated peak reduction
 
-Each card should include a small delta versus the previous month or previous comparable period where the data supports it.
+The total electricity card includes a latest-month delta where previous-month data exists.
 
-Add summary charts:
+Added summary charts:
 
 - Monthly electricity usage trend with campus filter
 - Estimated Scope 2 emissions trend using the DCCEEW factor
@@ -60,18 +64,17 @@ Add summary charts:
 
 ## Usage Patterns
 
-Add charts that explain how electricity usage behaves over time:
+Added charts that explain how electricity usage behaves over time:
 
 - Monthly usage by campus as a stacked or grouped bar chart
 - Hour-of-day and day-of-week heatmap
-- Daily usage calendar-style heatmap if practical in Streamlit
 - Top 10 or top 20 meters/buildings by usage
 
 Avoid too many raw time-series lines because they become hard to read.
 
 ## Weather-Normalized Efficiency
 
-Add charts based on `gold.gold_weather_normalized_usage`:
+Added charts based on `gold.gold_weather_normalized_usage`:
 
 - Actual versus expected usage line chart
 - Residual usage chart where residual means `actual - expected`
@@ -83,10 +86,9 @@ Use the label `high-usage candidate`, not waste, fault, or savings.
 
 ## Peak-Shifting Simulator
 
-Add charts based on `gold.gold_peak_shift_simulation`:
+Added charts based on `gold.gold_peak_shift_simulation`:
 
 - Scenario comparison for 5%, 10%, and 15% flexible load
-- Before versus after peak chart for a representative high-peak day, if the available table fields support it
 - Peak reduction leaderboard
 - Energy preservation check card
 
@@ -104,11 +106,10 @@ Because emissions use a static DCCEEW Scope 2 factor, same-day shifting preserve
 
 ## Data Quality And Trust
 
-Add a page that explains why the data can be trusted:
+Added a page that explains why the data can be trusted:
 
 - Medallion pipeline row-count funnel from bronze to silver to gold
-- Quality checks status table
-- Dropped or filtered records summary where reports expose this information
+- Quality check status message when the quality report table is not available
 - NMI versus building reconciliation gap chart
 
 ## Chart Design Rules
@@ -134,16 +135,16 @@ Add a page that explains why the data can be trusted:
 
 ## Acceptance Criteria
 
-- Multi-page dashboard navigation exists.
-- Executive KPI cards exist.
-- Hour-of-day and day-of-week heatmap exists.
-- Actual versus expected usage chart exists.
-- Efficiency opportunity ranking exists.
-- Peak-shift scenario comparison exists.
-- Data quality and trust page exists.
-- Pages include concise assumptions and insight captions.
-- Dashboard remains robust when optional Phase 2 tables are missing.
-- Tests pass.
+- Multi-page dashboard navigation exists: done.
+- Executive KPI cards exist: done.
+- Hour-of-day and day-of-week heatmap exists: done.
+- Actual versus expected usage chart exists: done.
+- Efficiency opportunity ranking exists: done.
+- Peak-shift scenario comparison exists: done.
+- Data quality and trust page exists: done.
+- Pages include concise assumptions and insight captions: done.
+- Dashboard remains robust when optional Phase 2 tables are missing: done.
+- Tests pass: done.
 
 ## Tests Or Validation
 
@@ -163,10 +164,26 @@ Manual validation:
 - Confirm no page claims emissions reduction from peak shifting.
 - Stop the Streamlit server after validation.
 
+## Validation Performed
+
+```bash
+make test
+make lint
+```
+
+Result:
+
+- `33 passed`
+- Ruff found no issues after removing unused imports.
+
 ## Known Limitations
 
-This planned feature improves presentation and decision-support storytelling. It should not change pipeline semantics unless a separate backend feature is approved.
+- The dashboard is still local Streamlit, not deployed.
+- Built-in Streamlit charts are used to avoid adding new dependencies.
+- Daily calendar heatmap and screenshots were not added in this feature.
+- The data-quality page can show row counts and reconciliation checks, but the current quality workflow writes a markdown report rather than a queryable quality-check table.
+- The peak-shift table does not store full before/after hourly profiles, so the page shows scenario summaries and leaderboards instead of a full before/after daily load curve.
 
 ## Next Steps
 
-Implement this only after approval. This is a dashboard polish feature, not a new data-modeling feature.
+Optional future polish could add Plotly/Altair, screenshots, and a queryable quality-check result table.
