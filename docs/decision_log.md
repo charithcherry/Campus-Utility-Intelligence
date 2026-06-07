@@ -29,3 +29,9 @@ Silver cleaning creates separate building, NMI, and submeter electricity tables.
 Rows with missing required IDs, missing timestamps, missing consumption, or negative consumption are excluded from silver. Repeated meter/timestamp rows are deduplicated with `ROW_NUMBER`.
 
 Submeter deduplication uses the normalized output timestamp because timezone-aware source timestamps can collapse to the same silver timestamp.
+
+## 2026-06-06: Keep gold usage metrics source-aware
+
+Gold usage metrics aggregate building, NMI, and submeter readings together only after keeping `source_system`. This avoids hiding differences in source grain while still supporting cross-source reporting.
+
+Peak demand is calculated from NMI readings because NMI silver data includes `demand_kw` and `demand_kva`.

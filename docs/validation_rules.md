@@ -41,3 +41,9 @@ The report checks:
 - Campus IDs map to `bronze.bronze_campus_meta`
 
 The command exits with an error if any required check fails.
+
+## Gold Metrics Validation
+
+Feature 6 validates gold metrics with unit tests that check hourly aggregation and NMI peak-demand selection.
+
+Gold tables should be regenerated after `make transform` and `make quality`.

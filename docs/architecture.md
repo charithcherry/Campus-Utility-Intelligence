@@ -21,3 +21,9 @@ Bronze tables preserve source columns with minimal transformation. Cleaning, sta
 Feature 4 creates cleaned electricity tables in the DuckDB `silver` schema.
 
 The silver layer standardizes required ID fields, timestamps, and numeric reading columns. It filters missing required values, removes negative consumption rows, and deduplicates repeated meter/timestamp records.
+
+## Gold Layer
+
+Feature 6 creates reporting-ready electricity metrics in the DuckDB `gold` schema.
+
+Gold tables aggregate silver readings into hourly, daily, and monthly usage. Peak-demand metrics use NMI demand readings to identify the highest observed demand per campus and meter.

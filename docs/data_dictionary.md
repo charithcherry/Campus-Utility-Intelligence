@@ -60,3 +60,12 @@ DuckDB inferred source types during bronze ingestion. Final cleaned data types w
 | `silver.silver_submeter_electricity_readings` | One submeter reading per campus, building, meter, and timestamp | `campus_id`, `building_id`, `meter_id`, `reading_timestamp` |
 
 Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, `consumption`, and `source_system`. NMI readings also include `demand_kw` and `demand_kva`. Submeter readings also include `current`, `voltage`, `power`, and `power_factor`.
+
+## Gold Metric Tables
+
+| Gold Table | Grain | Purpose |
+| --- | --- | --- |
+| `gold.gold_hourly_electricity_usage` | Campus, source, meter, optional building, and hour | Hourly usage trends and dashboard time series |
+| `gold.gold_daily_electricity_usage` | Campus, source, and date | Daily usage summaries |
+| `gold.gold_monthly_electricity_usage` | Campus, source, and month | Monthly usage summaries |
+| `gold.gold_peak_demand` | Campus and NMI meter | Highest observed NMI demand |
