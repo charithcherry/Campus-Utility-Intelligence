@@ -144,8 +144,8 @@ elif page == "Usage Patterns":
         ordered_days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
         pivot = pivot.reindex([day for day in ordered_days if day in pivot.index])
         st.dataframe(
-            pivot.style.background_gradient(cmap="Blues", axis=None).format("{:,.1f}"),
-            use_container_width=True,
+            pivot.round(1),
+            width="stretch",
         )
         render_caption("Darker cells show higher average usage by hour and weekday.")
     else:
@@ -155,7 +155,7 @@ elif page == "Usage Patterns":
     top_entities = load_top_usage_entities(config.db_path, selected_campuses, selected_sources)
     st.bar_chart(top_entities, x="meter_id", y="total_consumption", color="source_system")
     render_caption("Top groups are limited to 20 so the ranking stays readable.")
-    st.dataframe(top_entities, use_container_width=True, hide_index=True)
+    st.dataframe(top_entities, width="stretch", hide_index=True)
 
 elif page == "Emissions":
     st.subheader("Emissions")
@@ -166,14 +166,14 @@ elif page == "Emissions":
     assumptions = load_emissions_assumptions(config.db_path)
     emissions = load_emissions(config.db_path, selected_campuses, selected_sources)
     st.markdown("#### Emissions assumptions")
-    st.dataframe(assumptions, use_container_width=True, hide_index=True)
+    st.dataframe(assumptions, width="stretch", hide_index=True)
     st.markdown("#### Estimated Scope 2 emissions trend")
     st.line_chart(emissions, x="usage_month", y="estimated_emissions_kg_co2e", color="source_system")
     render_caption(
         "Uses DCCEEW NGA 2025 Victoria Scope 2 factor: 0.78 kg CO2-e/kWh. "
         "Scope 3 is documented but not used."
     )
-    st.dataframe(emissions, use_container_width=True, hide_index=True)
+    st.dataframe(emissions, width="stretch", hide_index=True)
 
 elif page == "Weather-Normalized Efficiency":
     st.subheader("Weather-Normalized Efficiency")
@@ -218,7 +218,7 @@ elif page == "Weather-Normalized Efficiency":
             render_caption("Sampled points help show whether usage rises with outside temperature.")
 
         st.markdown("#### Summary table")
-        st.dataframe(baseline_summary, use_container_width=True, hide_index=True)
+        st.dataframe(baseline_summary, width="stretch", hide_index=True)
     else:
         st.info("Weather baseline table not found. Run `make baseline`.")
 
@@ -243,7 +243,7 @@ elif page == "Peak-Shifting Simulator":
         st.markdown("#### Scenario comparison")
         st.bar_chart(comparison, x="flexible_load_percent", y="avg_peak_reduction")
         render_caption("Compares average peak reduction across valid flexible-load scenarios.")
-        st.dataframe(comparison, use_container_width=True, hide_index=True)
+        st.dataframe(comparison, width="stretch", hide_index=True)
 
         flexible_load_percent = st.selectbox(
             "Flexible load percent",
@@ -259,7 +259,7 @@ elif page == "Peak-Shifting Simulator":
         st.markdown("#### Peak reduction leaderboard")
         st.bar_chart(shift_summary, x="source_system", y="avg_peak_reduction", color="campus_id")
         render_caption("Ranks campus/source groups by average simulated peak reduction.")
-        st.dataframe(shift_results, use_container_width=True, hide_index=True)
+        st.dataframe(shift_results, width="stretch", hide_index=True)
     else:
         st.info("Peak-shift simulation table not found. Run `make simulate-shift`.")
 
@@ -271,7 +271,7 @@ elif page == "NMI/Building Reconciliation":
         "Shows the gap between campus-level NMI usage and summed building usage. "
         "The data does not attribute the gap to exact physical causes."
     )
-    st.dataframe(reconciliation, use_container_width=True, hide_index=True)
+    st.dataframe(reconciliation, width="stretch", hide_index=True)
 
 elif page == "Data Quality":
     st.subheader("Data Quality And Trust")
@@ -281,7 +281,7 @@ elif page == "Data Quality":
         st.markdown("#### Medallion pipeline row-count funnel")
         st.bar_chart(funnel, x="schema_name", y="row_count")
         render_caption("Shows how data moves from raw bronze tables into cleaned silver and gold marts.")
-        st.dataframe(row_counts, use_container_width=True, hide_index=True)
+        st.dataframe(row_counts, width="stretch", hide_index=True)
 
     quality_summary = load_quality_check_summary(config.db_path)
     st.markdown("#### Quality checks")
@@ -289,7 +289,7 @@ elif page == "Data Quality":
         st.info("Quality check table not found. Review `reports/data_quality_report.md` after running `make quality`.")
     else:
         st.bar_chart(quality_summary, x="status", y="check_count")
-        st.dataframe(quality_summary, use_container_width=True, hide_index=True)
+        st.dataframe(quality_summary, width="stretch", hide_index=True)
 
     st.markdown("#### Reconciliation trust check")
     reconciliation = load_reconciliation(config.db_path, selected_campuses)
