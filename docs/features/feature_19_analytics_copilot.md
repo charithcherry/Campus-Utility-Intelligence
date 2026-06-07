@@ -73,7 +73,7 @@ Optional local environment variables:
 
 ```bash
 GEMINI_API_KEY=...
-GEMINI_MODEL=gemini-3.5-flash
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 Do not commit API keys.

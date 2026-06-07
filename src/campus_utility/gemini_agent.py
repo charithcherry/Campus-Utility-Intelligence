@@ -14,9 +14,10 @@ import pandas as pd
 from campus_utility.doc_index import build_document_index, search_document_index
 from campus_utility.sql_safety import execute_readonly_query
 
-DEFAULT_GEMINI_MODEL = "gemini-3.5-flash"
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
-MAX_TOOL_TURNS = 5
+DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
+GEMINI_API_URL = f"{GEMINI_API_BASE_URL}/models/{{model}}:generateContent"
+MAX_TOOL_TURNS = 8
 
 SYSTEM_PROMPT = """You are the Campus Utility Intelligence Analyst, an expert in sustainability data engineering, campus utility analytics, energy efficiency, Scope 2 emissions estimation, weather-normalized baselines, peak-demand analysis, demand-response simulation, and DuckDB-based analytics marts.
 
@@ -38,6 +39,7 @@ Rules:
 - Never claim emissions-aware optimization unless real hourly carbon-intensity data is loaded.
 - Include the SQL query used when answering metric questions.
 - Include retrieved source file names when answering documentation questions.
+- Once a SQL tool returns rows that answer the question, stop calling tools and provide the final answer.
 - Keep answers concise, technical, and honest.
 """
 
@@ -82,6 +84,20 @@ def configured_gemini_model() -> str:
     """Return configured Gemini model."""
 
     return os.getenv("GEMINI_MODEL", DEFAULT_GEMINI_MODEL)
+
+
+def list_available_gemini_models() -> list[str]:
+    """List available Gemini model names for the configured API key."""
+
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is not configured")
+    payload = _call_gemini_models_api(api_key)
+    return [
+        model["name"].removeprefix("models/")
+        for model in payload.get("models", [])
+        if "generateContent" in model.get("supportedGenerationMethods", [])
+    ]
 
 
 def retrieve_project_docs(query: str, project_root: Path, top_k: int = 5) -> dict:
@@ -239,7 +255,7 @@ def run_gemini_agent(question: str, project_root: Path, db_path: Path) -> Gemini
             function_response_parts.append(
                 {"functionResponse": {"name": name, "response": {"result": result}}}
             )
-        contents.append({"role": "user", "parts": function_response_parts})
+        contents.append({"role": "function", "parts": function_response_parts})
 
     return GeminiAgentResponse(
         answer="Gemini tool loop stopped after the maximum number of tool turns.",
@@ -303,17 +319,20 @@ def get_tool_declarations() -> list[dict]:
 
 
 def _execute_tool(name: str, args: dict, project_root: Path, db_path: Path) -> dict:
-    if name == "retrieve_project_docs":
-        return retrieve_project_docs(args["query"], project_root, int(args.get("top_k", 5)))
-    if name == "list_tables":
-        return list_tables(db_path)
-    if name == "describe_table":
-        return describe_table(args["table_name"], db_path)
-    if name == "run_read_only_sql":
-        return run_read_only_sql(args["sql"], db_path, int(args.get("max_rows", 50)))
-    if name == "get_project_snapshot":
-        return get_project_snapshot(db_path)
-    return {"error": f"Unknown tool: {name}"}
+    try:
+        if name == "retrieve_project_docs":
+            return retrieve_project_docs(args["query"], project_root, int(args.get("top_k", 5)))
+        if name == "list_tables":
+            return list_tables(db_path)
+        if name == "describe_table":
+            return describe_table(args["table_name"], db_path)
+        if name == "run_read_only_sql":
+            return run_read_only_sql(args["sql"], db_path, int(args.get("max_rows", 50)))
+        if name == "get_project_snapshot":
+            return get_project_snapshot(db_path)
+        return {"error": f"Unknown tool: {name}"}
+    except Exception as exc:  # noqa: BLE001 - tool errors are returned to the model
+        return {"error": str(exc)}
 
 
 def _call_gemini_api(model: str, payload: dict) -> dict:
@@ -326,6 +345,17 @@ def _call_gemini_api(model: str, payload: dict) -> dict:
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
         method="POST",
+    )
+    with request.urlopen(http_request, timeout=30) as response:  # noqa: S310
+        return json.loads(response.read().decode("utf-8"))
+
+
+def _call_gemini_models_api(api_key: str) -> dict:
+    url = f"{GEMINI_API_BASE_URL}/models?key={api_key}"
+    http_request = request.Request(
+        url,
+        headers={"Content-Type": "application/json"},
+        method="GET",
     )
     with request.urlopen(http_request, timeout=30) as response:  # noqa: S310
         return json.loads(response.read().decode("utf-8"))

@@ -185,7 +185,7 @@ Run the analytics copilot smoke check:
 make copilot-check
 ```
 
-The copilot answers project questions through a Gemini tool-calling agent when `GEMINI_API_KEY` is configured. The agent can retrieve project docs, list tables, describe tables, run safe read-only SQL, and return a project snapshot. If Gemini is unavailable, it falls back to local retrieval and predefined metric SQL routes. It does not embed raw meter rows. `GEMINI_MODEL` defaults to `gemini-3.5-flash`. API keys belong in local environment variables only and must not be committed.
+The copilot answers project questions through a Gemini tool-calling agent when `GEMINI_API_KEY` is configured. The agent can retrieve project docs, list tables, describe tables, run safe read-only SQL, and return a project snapshot. If Gemini is unavailable, it falls back to local retrieval and predefined metric SQL routes. It does not embed raw meter rows. `GEMINI_MODEL` defaults to `gemini-2.5-flash`. API keys belong in local environment variables only and must not be committed.
 
 Download the UNICON dataset from Kaggle:
 

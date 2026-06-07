@@ -42,11 +42,11 @@ def test_answer_question_uses_gemini_tool_agent_when_configured(tmp_path, monkey
         encoding="utf-8",
     )
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
-    monkeypatch.setenv("GEMINI_MODEL", "gemini-3.5-flash")
+    monkeypatch.setenv("GEMINI_MODEL", "gemini-2.5-flash")
 
     class FakeGeminiResponse:
         answer = "Gemini answer"
-        model = "gemini-3.5-flash"
+        model = "gemini-2.5-flash"
         tool_calls = []
         sql_queries = []
 
@@ -59,7 +59,7 @@ def test_answer_question_uses_gemini_tool_agent_when_configured(tmp_path, monkey
 
     assert response.mode == "gemini_tool_agent"
     assert response.answer == "Gemini answer"
-    assert response.used_model == "gemini-3.5-flash"
+    assert response.used_model == "gemini-2.5-flash"
     assert response.gemini_enabled is True
 
 

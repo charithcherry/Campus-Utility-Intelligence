@@ -340,11 +340,13 @@ elif page == "Analytics Copilot":
         response = answer_question(question, Path("."), config.db_path)
         if response.used_model:
             st.caption(f"Model: {response.used_model}")
-        if response.fallback_reason:
-            st.warning(response.fallback_reason)
+        fallback_reason = getattr(response, "fallback_reason", None)
+        if fallback_reason:
+            st.warning(fallback_reason)
         st.markdown(response.answer)
 
-        if response.tool_calls:
+        tool_calls = getattr(response, "tool_calls", None)
+        if tool_calls:
             st.markdown("#### Tool calls made")
             tool_rows = [
                 {
@@ -352,7 +354,7 @@ elif page == "Analytics Copilot":
                     "arguments": call.arguments,
                     "status": "error" if "error" in call.result else "ok",
                 }
-                for call in response.tool_calls
+                for call in tool_calls
             ]
             st.dataframe(tool_rows, width="stretch", hide_index=True)
 

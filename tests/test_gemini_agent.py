@@ -2,7 +2,9 @@ import duckdb
 
 from campus_utility.gemini_agent import (
     SYSTEM_PROMPT,
+    _execute_tool,
     get_tool_declarations,
+    list_available_gemini_models,
     list_tables,
     retrieve_project_docs,
     run_gemini_agent,
@@ -28,6 +30,27 @@ def test_tool_declarations_include_required_tools():
         "run_read_only_sql",
         "get_project_snapshot",
     }
+
+
+def test_list_available_gemini_models_filters_generate_content(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.setattr(
+        "campus_utility.gemini_agent._call_gemini_models_api",
+        lambda api_key: {
+            "models": [
+                {
+                    "name": "models/gemini-2.5-flash",
+                    "supportedGenerationMethods": ["generateContent"],
+                },
+                {
+                    "name": "models/gemini-2.0-flash-lite",
+                    "supportedGenerationMethods": ["countTokens"],
+                },
+            ]
+        },
+    )
+
+    assert list_available_gemini_models() == ["gemini-2.5-flash"]
 
 
 def test_retrieve_project_docs_returns_sources(tmp_path):
@@ -65,6 +88,15 @@ def test_run_read_only_sql_blocks_mutation(tmp_path):
     assert result["rows"] == []
 
 
+def test_execute_tool_returns_structured_error(tmp_path):
+    db_path = _create_agent_test_database(tmp_path)
+
+    result = _execute_tool("describe_table", {"table_name": "bad_table"}, tmp_path, db_path)
+
+    assert "error" in result
+    assert "schema" in result["error"]
+
+
 def test_gemini_agent_records_doc_and_sql_tool_trace(tmp_path, monkeypatch):
     db_path = _create_agent_test_database(tmp_path)
     (tmp_path / "README.md").write_text(
@@ -72,7 +104,7 @@ def test_gemini_agent_records_doc_and_sql_tool_trace(tmp_path, monkeypatch):
         encoding="utf-8",
     )
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
-    monkeypatch.setenv("GEMINI_MODEL", "gemini-3.5-flash")
+    monkeypatch.setenv("GEMINI_MODEL", "gemini-2.5-flash")
     responses = [
         {
             "candidates": [
@@ -105,7 +137,7 @@ def test_gemini_agent_records_doc_and_sql_tool_trace(tmp_path, monkeypatch):
     ]
 
     def fake_call(model, payload):
-        assert model == "gemini-3.5-flash"
+        assert model == "gemini-2.5-flash"
         assert payload["tools"]
         return responses.pop(0)
 
