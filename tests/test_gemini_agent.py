@@ -75,6 +75,7 @@ def test_list_tables_and_read_only_sql(tmp_path):
     )
 
     assert "gold_demand_response_simulation" in tables["tables"]["gold"]
+    assert "gold.gold_demand_response_simulation" in tables["full_table_names"]
     assert sql_result["rows"][0]["row_count"] == 1
     assert "LIMIT 50" in sql_result["sql"]
 
@@ -95,6 +96,23 @@ def test_execute_tool_returns_structured_error(tmp_path):
 
     assert "error" in result
     assert "schema" in result["error"]
+
+
+def test_execute_tool_requires_describe_before_sql(tmp_path):
+    db_path = _create_agent_test_database(tmp_path)
+    sql_args = {"sql": "SELECT COUNT(*) FROM gold.gold_demand_response_simulation"}
+
+    blocked = _execute_tool("run_read_only_sql", sql_args, tmp_path, db_path, set())
+    allowed = _execute_tool(
+        "run_read_only_sql",
+        sql_args,
+        tmp_path,
+        db_path,
+        {"gold.gold_demand_response_simulation"},
+    )
+
+    assert "Describe every referenced table" in blocked["error"]
+    assert allowed["rows"][0]["count_star()"] == 1
 
 
 def test_gemini_agent_records_doc_and_sql_tool_trace(tmp_path, monkeypatch):
@@ -133,6 +151,35 @@ def test_gemini_agent_records_doc_and_sql_tool_trace(tmp_path, monkeypatch):
                 }
             ]
         },
+        {
+            "candidates": [
+                {
+                    "content": {
+                        "parts": [
+                            {
+                                "functionCall": {
+                                    "name": "describe_table",
+                                    "args": {
+                                        "table_name": "gold.gold_demand_response_simulation"
+                                    },
+                                }
+                            },
+                            {
+                                "functionCall": {
+                                    "name": "run_read_only_sql",
+                                    "args": {
+                                        "sql": (
+                                            "SELECT COUNT(*) AS row_count "
+                                            "FROM gold.gold_demand_response_simulation"
+                                        )
+                                    },
+                                }
+                            },
+                        ]
+                    }
+                }
+            ]
+        },
         {"candidates": [{"content": {"parts": [{"text": "Final grounded answer."}]}}]},
     ]
 
@@ -148,6 +195,8 @@ def test_gemini_agent_records_doc_and_sql_tool_trace(tmp_path, monkeypatch):
     assert response.answer == "Final grounded answer."
     assert [call.name for call in response.tool_calls] == [
         "retrieve_project_docs",
+        "run_read_only_sql",
+        "describe_table",
         "run_read_only_sql",
     ]
     assert response.sql_queries

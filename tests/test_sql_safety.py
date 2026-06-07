@@ -34,6 +34,12 @@ def test_validate_readonly_select_blocks_multi_statement_sql():
         validate_readonly_select("SELECT 1; SELECT 2")
 
 
+def test_validate_readonly_select_allows_trailing_semicolon():
+    sql = validate_readonly_select("SELECT 1 AS value;")
+
+    assert sql == "SELECT 1 AS value LIMIT 50"
+
+
 def test_execute_readonly_query_returns_dataframe(tmp_path):
     db_path = tmp_path / "processed" / "campus_utility.duckdb"
     db_path.parent.mkdir(parents=True)

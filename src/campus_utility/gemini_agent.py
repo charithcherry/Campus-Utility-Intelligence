@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from urllib import request
@@ -29,8 +30,10 @@ Rules:
 - Do not invent metrics, tables, columns, emissions factors, or results.
 - Use tools before answering questions that require project facts, table values, row counts, SQL results, or documentation details.
 - For methodology questions, retrieve relevant project docs.
-- For metric questions, inspect schemas and run safe read-only SQL.
+- For metric questions, call `describe_table` for every table before using it in SQL.
 - For mixed questions, retrieve docs and run SQL if needed.
+- Always use schema-qualified DuckDB table names exactly as returned in `full_table_names`.
+- Do not put a semicolon at the end of SQL passed to `run_read_only_sql`.
 - Explain assumptions and limitations clearly.
 - Emissions are estimated Scope 2 values, not carbon accounting compliance.
 - High-usage candidates are investigation candidates, not confirmed waste or faults.
@@ -132,9 +135,11 @@ def list_tables(db_path: Path) -> dict:
             """
         ).fetchall()
     tables: dict[str, list[str]] = {}
+    full_table_names = []
     for schema, table in rows:
         tables.setdefault(schema, []).append(table)
-    return {"tables": tables}
+        full_table_names.append(f"{schema}.{table}")
+    return {"tables": tables, "full_table_names": full_table_names}
 
 
 def describe_table(table_name: str, db_path: Path) -> dict:
@@ -230,6 +235,7 @@ def run_gemini_agent(question: str, project_root: Path, db_path: Path) -> Gemini
         }
     ]
     traces: list[ToolCallTrace] = []
+    described_tables: set[str] = set()
 
     for _ in range(MAX_TOOL_TURNS):
         response = _call_gemini_api(
@@ -250,7 +256,9 @@ def run_gemini_agent(question: str, project_root: Path, db_path: Path) -> Gemini
         for call in function_calls:
             name = call["name"]
             args = call.get("args", {})
-            result = _execute_tool(name, args, project_root, db_path)
+            result = _execute_tool(name, args, project_root, db_path, described_tables)
+            if name == "describe_table" and "table_name" in result:
+                described_tables.add(str(result["table_name"]))
             traces.append(ToolCallTrace(name=name, arguments=args, result=result))
             function_response_parts.append(
                 {"functionResponse": {"name": name, "response": {"result": result}}}
@@ -318,7 +326,13 @@ def get_tool_declarations() -> list[dict]:
     ]
 
 
-def _execute_tool(name: str, args: dict, project_root: Path, db_path: Path) -> dict:
+def _execute_tool(
+    name: str,
+    args: dict,
+    project_root: Path,
+    db_path: Path,
+    described_tables: set[str] | None = None,
+) -> dict:
     try:
         if name == "retrieve_project_docs":
             return retrieve_project_docs(args["query"], project_root, int(args.get("top_k", 5)))
@@ -327,6 +341,16 @@ def _execute_tool(name: str, args: dict, project_root: Path, db_path: Path) -> d
         if name == "describe_table":
             return describe_table(args["table_name"], db_path)
         if name == "run_read_only_sql":
+            required_tables = _extract_referenced_tables(args["sql"])
+            missing_tables = sorted(required_tables - (described_tables or set()))
+            if missing_tables:
+                return {
+                    "error": (
+                        "Describe every referenced table before running SQL. "
+                        f"Missing table descriptions: {', '.join(missing_tables)}"
+                    ),
+                    "required_tables": sorted(required_tables),
+                }
             return run_read_only_sql(args["sql"], db_path, int(args.get("max_rows", 50)))
         if name == "get_project_snapshot":
             return get_project_snapshot(db_path)
@@ -401,6 +425,17 @@ def _validate_table_name(table_name: str, db_path: Path) -> tuple[str, str]:
     if not exists:
         raise ValueError(f"Unknown table: {table_name}")
     return schema, table
+
+
+def _extract_referenced_tables(sql: str) -> set[str]:
+    """Extract schema-qualified project table names from a SQL query."""
+
+    matches = re.findall(
+        r"\b(?:from|join)\s+((?:bronze|silver|gold|reference)\.[a-zA-Z0-9_]+)\b",
+        sql,
+        flags=re.IGNORECASE,
+    )
+    return {match.lower() for match in matches}
 
 
 def _dataframe_rows(data: pd.DataFrame) -> list[dict]:

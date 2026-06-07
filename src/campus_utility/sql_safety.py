@@ -30,7 +30,7 @@ BLOCKED_SQL_TOKENS = {
 def validate_readonly_select(sql: str, default_limit: int = 50) -> str:
     """Validate and normalize a single read-only SELECT statement."""
 
-    normalized = " ".join(sql.strip().split())
+    normalized = " ".join(sql.strip().split()).removesuffix(";").strip()
     if not normalized:
         raise ValueError("SQL query is empty")
     if ";" in normalized:
