@@ -198,10 +198,10 @@ Estimated emissions use configurable reference factors. The included factor is a
 
 ## Final Review
 
-See `docs/final_review.md` for the first end-to-end validation summary. See `docs/final_review_phase_2.md` for the completed Phase 2 validation summary, decision-support outputs, limitations, and resume alignment.
+See `docs/final_review.md` for the first end-to-end validation summary. See `docs/final_review_phase_2.md` for the completed Phase 2 validation summary. See `docs/final_review_phase_3.md` for the final Phase 3 validation summary, grid-aware simulation outputs, limitations, and resume alignment.
 
 ## Future Work
 
-See `docs/phase_3_plan.md` for planned grid-aware decision-support work.
+See `docs/phase_3_plan.md` for grid-aware decision-support notes.
 
 Next step should be Final Review Phase 3. Optional later features are forecasting, anomaly investigation, or RAG/SQL copilot.
