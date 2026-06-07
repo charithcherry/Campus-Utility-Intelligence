@@ -27,3 +27,9 @@ The silver layer standardizes required ID fields, timestamps, and numeric readin
 Feature 6 creates reporting-ready electricity metrics in the DuckDB `gold` schema.
 
 Gold tables aggregate silver readings into hourly, daily, and monthly usage. Peak-demand metrics use NMI demand readings to identify the highest observed demand per campus and meter.
+
+## SQL Analytics
+
+Feature 8 stores reusable SQL report queries under `sql/marts/`.
+
+The analytics runner executes those queries against DuckDB and writes markdown outputs under `reports/sql_analytics/`.

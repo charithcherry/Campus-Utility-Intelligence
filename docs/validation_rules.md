@@ -55,3 +55,9 @@ Feature 7 validates emissions calculations with unit tests that confirm:
 - The emissions table is created from monthly usage
 - The configured emissions factor is stored on each row
 - Estimated emissions equal usage multiplied by the factor
+
+## SQL Analytics Validation
+
+Feature 8 validates that SQL files can run against DuckDB and write markdown outputs.
+
+The real `make analytics` run should happen after `make metrics` and `make emissions`.

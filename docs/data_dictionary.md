@@ -70,3 +70,12 @@ Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, 
 | `gold.gold_monthly_electricity_usage` | Campus, source, and month | Monthly usage summaries |
 | `gold.gold_peak_demand` | Campus and NMI meter | Highest observed NMI demand |
 | `gold.gold_electricity_emissions` | Campus, source, and month | Estimated emissions from monthly usage |
+
+## SQL Analytics Outputs
+
+| Query | Purpose |
+| --- | --- |
+| `top_monthly_usage.sql` | Highest monthly usage records |
+| `peak_demand_by_meter.sql` | Highest observed NMI demand records |
+| `monthly_emissions_summary.sql` | Highest monthly estimated emissions records |
+| `source_usage_summary.sql` | Total usage by source system |

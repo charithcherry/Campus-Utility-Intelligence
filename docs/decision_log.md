@@ -41,3 +41,7 @@ Peak demand is calculated from NMI readings because NMI silver data includes `de
 Estimated emissions multiply monthly electricity usage by `CAMPUS_ELECTRICITY_EMISSIONS_FACTOR_KG_CO2E_PER_UNIT`.
 
 The default value is `0.79` kg CO2e per usage unit. This is treated as a configurable estimate, not an official project-specific factor.
+
+## 2026-06-06: Store analytics queries as SQL files
+
+Reusable analytics questions live in `sql/marts/` instead of being embedded only in Python. This keeps SQL visible for review and easier to reuse in dashboards later.
