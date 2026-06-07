@@ -16,6 +16,7 @@ data/interim/
 data/processed/
 !data/reference/
 !data/reference/*.csv
+data/reference/grid_carbon_intensity_hourly.csv
 reports/
 *.duckdb
 *.duckdb.wal

@@ -35,13 +35,13 @@ Current limitation: emissions use a static factor. Same-day peak shifting does n
 
 ## Recommended Order
 
-1. Feature 16: Time-Varying Carbon Intensity Layer
-2. Feature 17: Demand-Response Event Simulator
+1. Feature 16: Time-Varying Carbon Intensity Layer: implemented
+2. Feature 17: Demand-Response Event Simulator: planned
 3. Stop for review before considering forecasting, anomaly workbench, or RAG
 
 ## Feature 16: Time-Varying Carbon Intensity Layer
 
-Status: planned.
+Status: implemented.
 
 Goal: add optional hourly grid carbon-intensity data so the project can compare static Scope 2 emissions with time-varying grid-aware emissions estimates.
 
@@ -75,7 +75,7 @@ Accuracy rules:
 - Clearly separate static Scope 2 estimates from time-varying operational grid-intensity estimates.
 - Document source, region, timestamp grain, unit, and license/access assumptions.
 
-Suggested command:
+Command:
 
 ```bash
 make carbon-intensity

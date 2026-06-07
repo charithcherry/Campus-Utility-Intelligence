@@ -2,62 +2,66 @@
 
 ## Goal
 
-Plan an optional hourly grid carbon-intensity layer so the project can compare static DCCEEW Scope 2 estimates with time-varying grid-aware emissions estimates.
+Add an optional hourly grid carbon-intensity layer so the project can compare static DCCEEW Scope 2 estimates with time-varying grid-aware emissions estimates.
 
 ## Status
 
-Planned. This feature is not implemented yet.
+Implemented.
 
-## Files Expected To Change
+## Files Changed
 
 - `src/campus_utility/carbon_intensity.py`
-- `src/campus_utility/peak_shift.py`
-- `src/campus_utility/dashboard_data.py`
-- `dashboard/app.py`
 - `tests/test_carbon_intensity.py`
-- `tests/test_peak_shift.py`
+- `src/campus_utility/config.py`
+- `.env.example`
+- `.gitignore`
+- `Makefile`
 - `data/reference/`
 - `docs/data_dictionary.md`
 - `docs/decision_log.md`
+- `docs/architecture.md`
 - `docs/features/feature_16_time_varying_carbon_intensity.md`
 - `README.md`
-- `Makefile`
 
 ## Implementation Details
 
-Expected output table:
+Output reference table:
 
 ```text
 reference.reference_grid_carbon_intensity_hourly
 ```
 
-Expected fields:
+Reference fields:
 
 ```text
 region
-network
-intensity_timestamp
+region_name
+interval_start
+interval_end
+interval_start_hour
 emissions_intensity_kg_co2e_per_kwh
 source_name
 source_url
-source_version
-unit
+data_version
+is_synthetic
+ingested_at
 notes
 ```
 
-Expected gold output:
+Gold output:
 
 ```text
 gold.gold_hourly_time_varying_emissions
 ```
 
-Expected behavior:
+Implemented behavior:
 
-- Load verified hourly carbon-intensity data from a source file or API export.
+- Load hourly carbon-intensity data from a user-provided CSV when present.
 - Join hourly electricity usage to hourly carbon intensity by timestamp and region.
 - Calculate hourly time-varying estimated emissions.
 - Compare static DCCEEW emissions with time-varying estimates.
-- Extend peak-shift simulation with carbon-aware strategies only after real intensity data exists.
+- Fall back to static DCCEEW factors when hourly factors are missing.
+- Keep peak-shift carbon-aware strategies for a later feature after real hourly intensity data is available.
 
 ## Source Candidates
 
@@ -66,22 +70,39 @@ Expected behavior:
 
 ## How To Run It
 
-Planned command:
+Command:
 
 ```bash
 make carbon-intensity
 ```
 
-## Tests Or Validation To Perform
+## Tests Or Validation Performed
 
-- Schema check for reference intensity table
-- Source metadata check
-- Timestamp coverage check
-- Null intensity check
-- Unit conversion test
-- Join coverage test between hourly usage and intensity
-- Static versus time-varying comparison test
-- Peak-shift strategy test for lowest-demand, lowest-carbon, and balanced strategies
+```bash
+make test
+make lint
+make carbon-intensity
+```
+
+Results:
+
+- `39 passed`
+- Ruff passed
+- `reference.reference_grid_carbon_intensity_hourly`: 0 rows because no real hourly file exists locally
+- `gold.gold_hourly_time_varying_emissions`: 2,987,097 rows
+- `matched_hourly_factor`: 0 rows
+- `fallback_static_factor`: 2,987,097 rows
+- `missing_hourly_factor`: 0 rows
+
+Automated tests cover:
+
+- valid synthetic sample loading
+- missing required columns
+- negative intensity rejection
+- duplicate region/hour rejection
+- hourly factor join behavior
+- missing-file static fallback behavior
+- emissions calculation correctness
 
 ## Known Limitations
 
@@ -89,7 +110,9 @@ make carbon-intensity
 - Do not claim compliance reporting.
 - Time-varying operational intensity is not the same as official Scope 2 accounting.
 - Source licensing and API access must be checked before committing any reference data.
+- The committed example CSV is synthetic and is not used as official data.
+- Peak-shift carbon-aware optimization is not implemented in this feature.
 
 ## Next Steps
 
-Implement only after approving Feature 16 and selecting a valid data source.
+Feature 17 is the planned next feature: demand-response event simulator.

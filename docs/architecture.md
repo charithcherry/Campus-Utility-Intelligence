@@ -57,3 +57,11 @@ The model is an explainable grouped median baseline by campus, source, meter, op
 Feature 13 creates `gold.gold_peak_shift_simulation`.
 
 The simulator shifts configurable flexible load from peak hourly consumption to lower same-day hourly consumption within each campus/source/meter/building group. It preserves total daily energy and does not claim emissions reduction under the current static emissions factor.
+
+## Time-Varying Carbon Intensity
+
+Feature 16 adds an optional reference layer for hourly grid carbon intensity.
+
+The workflow reads a user-provided CSV from `CAMPUS_GRID_CARBON_INTENSITY_PATH`, creates `reference.reference_grid_carbon_intensity_hourly`, and joins it to `gold.gold_hourly_electricity_usage` to create `gold.gold_hourly_time_varying_emissions`.
+
+If no hourly carbon-intensity file is present, the reference table is empty and the gold table uses deterministic static-factor fallback from `gold.gold_electricity_emissions`. This keeps the DCCEEW static emissions workflow as the default while allowing source-dependent operational grid-intensity analysis when valid data exists.

@@ -2,7 +2,7 @@
 
 Campus Utility Intelligence is a local Python, SQL, DuckDB, and Streamlit analytics project for campus electricity usage data.
 
-Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, peak-shifting simulation, and a local Streamlit dashboard are implemented.
+Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, optional time-varying emissions comparison, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, peak-shifting simulation, and a local Streamlit dashboard are implemented.
 
 ## What Is Implemented
 
@@ -19,6 +19,7 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Data-quality checks for cleaned silver electricity tables
 - Gold usage and peak-demand metric tables
 - Estimated electricity emissions metric table
+- Optional hourly time-varying emissions comparison with static-factor fallback
 - Reusable SQL analytics queries with markdown outputs
 - Campus-level NMI versus building usage reconciliation
 - Weather-normalized electricity baseline and high-usage candidate scoring
@@ -144,6 +145,22 @@ make simulate-shift
 
 This creates `gold.gold_peak_shift_simulation` and writes `reports/peak_shift_report.md`.
 
+Build optional time-varying emissions comparison:
+
+```bash
+make carbon-intensity
+```
+
+This creates `reference.reference_grid_carbon_intensity_hourly`, `gold.gold_hourly_time_varying_emissions`, and `reports/time_varying_emissions_report.md`.
+
+By default, the command looks for:
+
+```bash
+data/reference/grid_carbon_intensity_hourly.csv
+```
+
+If no file is present, the reference table is empty and hourly rows fall back to the static DCCEEW factor. A tiny synthetic template is available at `data/reference/grid_carbon_intensity_example.csv`; it is not official data and should not be used for analysis.
+
 Open the local dashboard:
 
 ```bash
@@ -168,7 +185,7 @@ The profiling workflow currently supports `.csv`, `.json`, `.jsonl`, and `.parqu
 
 ## Known Limitations
 
-Estimated emissions use configurable reference factors. The included factor is an official DCCEEW Victoria Scope 2 electricity factor, but it should still be reviewed before formal reporting. The dashboard is local only and is not deployed.
+Estimated emissions use configurable reference factors. The included factor is an official DCCEEW Victoria Scope 2 electricity factor, but it should still be reviewed before formal reporting. Time-varying emissions require user-provided hourly carbon-intensity data and are source-dependent. The dashboard is local only and is not deployed.
 
 ## Final Review
 
@@ -178,4 +195,4 @@ See `docs/final_review.md` for the first end-to-end validation summary. See `doc
 
 See `docs/phase_3_plan.md` for planned grid-aware decision-support work.
 
-Recommended next feature: time-varying carbon intensity, followed by demand-response event simulation. These are planned only and are not implemented yet.
+Recommended next feature: demand-response event simulation. It is planned only and is not implemented yet.

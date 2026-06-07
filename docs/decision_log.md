@@ -89,3 +89,9 @@ The dashboard runs locally with Streamlit and reads from the DuckDB warehouse. I
 Features 16 and later are documented as planned Phase 3 work, not implemented functionality. The recommended next layer is time-varying carbon intensity because the current DCCEEW emissions workflow is static.
 
 Demand-response simulation, forecasting, anomaly investigation, and RAG/SQL copilot work are also treated as future options. The project should not claim real-time optimization, carbon-aware shifting, demand-response readiness, forecasting, anomaly root cause, or RAG capability until those features are implemented and validated.
+
+## 2026-06-07: Keep time-varying carbon intensity optional
+
+Feature 16 adds the schema and workflow for hourly grid carbon intensity, but it does not invent official hourly intensity values. The default input path is `data/reference/grid_carbon_intensity_hourly.csv`, which is ignored by git so large or licensed source data is not committed.
+
+When no hourly intensity file is present, `gold.gold_hourly_time_varying_emissions` falls back to static DCCEEW factors from `gold.gold_electricity_emissions`. Static DCCEEW emissions and time-varying operational grid-intensity estimates answer different questions, so the project keeps both separate.

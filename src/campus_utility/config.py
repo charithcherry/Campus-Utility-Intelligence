@@ -15,6 +15,7 @@ class ProjectConfig:
     db_path: Path
     electricity_emissions_factor_kg_co2e_per_unit: float
     emissions_factors_path: Path
+    grid_carbon_intensity_path: Path
 
 
 def get_config() -> ProjectConfig:
@@ -30,6 +31,12 @@ def get_config() -> ProjectConfig:
             os.getenv(
                 "CAMPUS_EMISSIONS_FACTORS_PATH",
                 "data/reference/emissions_factors_example.csv",
+            )
+        ),
+        grid_carbon_intensity_path=Path(
+            os.getenv(
+                "CAMPUS_GRID_CARBON_INTENSITY_PATH",
+                "data/reference/grid_carbon_intensity_hourly.csv",
             )
         ),
     )

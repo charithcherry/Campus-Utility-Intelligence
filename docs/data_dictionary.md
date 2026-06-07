@@ -70,6 +70,7 @@ Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, 
 | `gold.gold_monthly_electricity_usage` | Campus, source, and month | Monthly usage summaries |
 | `gold.gold_peak_demand` | Campus and NMI meter | Highest observed NMI demand |
 | `gold.gold_electricity_emissions` | Campus, source, and month | Estimated emissions from monthly usage |
+| `gold.gold_hourly_time_varying_emissions` | Campus, source, meter, optional building, and hour | Hourly emissions comparison using optional grid intensity with static fallback |
 | `gold.gold_daily_nmi_building_reconciliation` | Campus and date | Daily NMI usage compared with summed building usage |
 | `gold.gold_monthly_nmi_building_reconciliation` | Campus and month | Monthly NMI usage compared with summed building usage |
 | `gold.gold_weather_normalized_usage` | Campus, source, meter, optional building, and hour | Actual vs expected usage after weather/time normalization |
@@ -124,6 +125,41 @@ The local dashboard reads from gold usage, peak-demand, emissions, reconciliatio
 | `notes` | Factor limitations or assumptions |
 
 `gold.gold_electricity_emissions` stores the selected factor metadata on each emissions row.
+
+## Grid Carbon Intensity Reference
+
+`reference.reference_grid_carbon_intensity_hourly` is loaded by `make carbon-intensity` from `CAMPUS_GRID_CARBON_INTENSITY_PATH`, defaulting to `data/reference/grid_carbon_intensity_hourly.csv`.
+
+If the file is missing, the table is created empty and hourly emissions rows fall back to static DCCEEW factors from `gold.gold_electricity_emissions`.
+
+| Column | Meaning |
+| --- | --- |
+| `region_code` | Grid region code, such as `VIC1` |
+| `region_name` | Human-readable region name |
+| `interval_start` | Source interval start timestamp |
+| `interval_end` | Source interval end timestamp |
+| `interval_start_hour` | Hour used for joining to `gold.gold_hourly_electricity_usage.usage_hour` |
+| `emissions_intensity_kg_co2e_per_kwh` | Hourly grid emissions intensity |
+| `source_name` | Source name for the carbon-intensity data |
+| `source_url` | Source URL |
+| `data_version` | Source data version or extract identifier |
+| `is_synthetic` | Whether the row is explicitly marked synthetic |
+| `ingested_at` | Ingestion timestamp |
+| `notes` | Source notes and limitations |
+
+## Hourly Time-Varying Emissions Columns
+
+| Column | Meaning |
+| --- | --- |
+| `usage_hour` | Hourly electricity usage timestamp |
+| `total_consumption` | Hourly electricity usage |
+| `static_emissions_factor_kg_co2e_per_kwh` | Static DCCEEW factor selected by the monthly emissions workflow |
+| `static_estimated_emissions_kg_co2e` | Hourly usage multiplied by the static factor |
+| `time_varying_emissions_factor_kg_co2e_per_kwh` | Matched hourly grid intensity, if available |
+| `time_varying_estimated_emissions_kg_co2e` | Hourly usage multiplied by matched hourly intensity |
+| `factor_source_name` | Hourly factor source when matched, otherwise static factor source |
+| `factor_source_url` | Factor source URL |
+| `factor_match_status` | `matched_hourly_factor`, `fallback_static_factor`, or `missing_hourly_factor` |
 
 ## SQL Analytics Outputs
 
