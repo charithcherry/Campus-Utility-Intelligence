@@ -2,7 +2,7 @@
 
 Campus Utility Intelligence is a local Python, SQL, DuckDB, and Streamlit analytics project for campus electricity usage data.
 
-Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, optional time-varying emissions comparison, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, peak-shifting simulation, demand-response event simulation, documentation-aware analytics copilot, and a local Streamlit dashboard are implemented.
+Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, optional time-varying emissions comparison, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, peak-shifting simulation, demand-response event simulation, Gemini tool-calling analytics copilot with local fallback, and a local Streamlit dashboard are implemented.
 
 ## What Is Implemented
 
@@ -24,7 +24,7 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Campus-level NMI versus building usage reconciliation
 - Weather-normalized electricity baseline and high-usage candidate scoring
 - Offline demand-response event simulation for grid-stress target reduction and rebound analysis
-- Documentation-aware analytics copilot with local retrieval, optional Gemini summaries, and safe read-only DuckDB metric queries
+- Gemini tool-calling analytics copilot with project-doc retrieval, safe read-only DuckDB SQL tools, table inspection tools, and local fallback
 - Multi-page local Streamlit dashboard for executive KPIs, usage patterns, emissions, weather-normalized efficiency, peak-shift simulation, demand-response readiness, analytics copilot, reconciliation, data quality, and methodology notes
 
 ## Project Layout
@@ -185,7 +185,7 @@ Run the analytics copilot smoke check:
 make copilot-check
 ```
 
-The copilot answers documentation questions from project docs and metric questions through safe read-only DuckDB SQL. It does not embed raw meter rows. If `GEMINI_API_KEY` is configured, it uses `GEMINI_MODEL`, defaulting to `gemini-3.5-flash`, to summarize retrieved snippets or SQL result previews. API keys belong in local environment variables only and must not be committed.
+The copilot answers project questions through a Gemini tool-calling agent when `GEMINI_API_KEY` is configured. The agent can retrieve project docs, list tables, describe tables, run safe read-only SQL, and return a project snapshot. If Gemini is unavailable, it falls back to local retrieval and predefined metric SQL routes. It does not embed raw meter rows. `GEMINI_MODEL` defaults to `gemini-3.5-flash`. API keys belong in local environment variables only and must not be committed.
 
 Download the UNICON dataset from Kaggle:
 
@@ -203,7 +203,7 @@ The profiling workflow currently supports `.csv`, `.json`, `.jsonl`, and `.parqu
 
 ## Known Limitations
 
-Estimated emissions use configurable reference factors. The included factor is an official DCCEEW Victoria Scope 2 electricity factor, but it should still be reviewed before formal reporting. Time-varying emissions require user-provided hourly carbon-intensity data and are source-dependent. Demand-response output is an offline simulation, not real-time grid control. The copilot is lightweight and not production-ready. The dashboard is local only and is not deployed.
+Estimated emissions use configurable reference factors. The included factor is an official DCCEEW Victoria Scope 2 electricity factor, but it should still be reviewed before formal reporting. Time-varying emissions require user-provided hourly carbon-intensity data and are source-dependent. Demand-response output is an offline simulation, not real-time grid control. The Gemini copilot is local, tool-grounded, and not production-ready. The dashboard is local only and is not deployed.
 
 ## Final Review
 

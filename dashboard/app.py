@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import streamlit as st
@@ -326,9 +327,11 @@ elif page == "Grid Event Readiness":
 elif page == "Analytics Copilot":
     st.subheader("Analytics Copilot")
     st.caption(
-        "Documentation-aware copilot with safe read-only DuckDB queries. "
-        "Raw meter rows are not embedded. Gemini is used only when `GEMINI_API_KEY` is configured."
+        "Gemini tool-calling analytics agent with local fallback. "
+        "Raw meter rows are not embedded, and SQL tools are read-only."
     )
+    gemini_mode = "enabled" if os.getenv("GEMINI_API_KEY") else "disabled"
+    st.info(f"Gemini tool-calling mode: {gemini_mode}")
     question = st.text_input(
         "Ask about docs or metrics",
         placeholder="How many demand-response scenarios met the target?",
@@ -337,7 +340,21 @@ elif page == "Analytics Copilot":
         response = answer_question(question, Path("."), config.db_path)
         if response.used_model:
             st.caption(f"Model: {response.used_model}")
+        if response.fallback_reason:
+            st.warning(response.fallback_reason)
         st.markdown(response.answer)
+
+        if response.tool_calls:
+            st.markdown("#### Tool calls made")
+            tool_rows = [
+                {
+                    "tool": call.name,
+                    "arguments": call.arguments,
+                    "status": "error" if "error" in call.result else "ok",
+                }
+                for call in response.tool_calls
+            ]
+            st.dataframe(tool_rows, width="stretch", hide_index=True)
 
         if response.sql:
             st.markdown("#### SQL used")
@@ -350,6 +367,10 @@ elif page == "Analytics Copilot":
             for source in response.sources:
                 st.markdown(f"- `{source.source_path}` / {source.heading}")
                 st.caption(source.text[:500])
+        st.caption(
+            "Safety notes: answers must stay grounded in retrieved docs and read-only SQL. "
+            "Emissions are estimated Scope 2 only; simulations are offline planning outputs."
+        )
 
 elif page == "NMI/Building Reconciliation":
     st.subheader("NMI/Building Reconciliation")

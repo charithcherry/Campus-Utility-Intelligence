@@ -1,4 +1,4 @@
-# Feature 20: Forecasting And Peak-Risk Alerts
+# Feature 21: Forecasting And Peak-Risk Alerts
 
 ## Goal
 
@@ -16,7 +16,7 @@ Planned. This feature is not implemented yet.
 - `tests/test_forecasting.py`
 - `docs/data_dictionary.md`
 - `docs/decision_log.md`
-- `docs/features/feature_18_forecasting_peak_risk_alerts.md`
+- `docs/features/feature_21_forecasting_peak_risk_alerts.md`
 - `README.md`
 - `Makefile`
 

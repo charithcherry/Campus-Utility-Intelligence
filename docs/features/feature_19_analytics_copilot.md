@@ -34,7 +34,7 @@ The copilot supports two paths:
 
 The copilot does not embed raw electricity rows. Raw, silver, and gold data stay in DuckDB.
 
-Gemini is optional. If `GEMINI_API_KEY` is configured, the copilot uses `GEMINI_MODEL`, defaulting to `gemini-3.5-flash`, to summarize retrieved snippets or SQL result previews. If no key is configured, the copilot returns extractive local answers.
+Gemini integration was upgraded in Feature 20. The current implementation routes Gemini-enabled questions through a tool-calling agent. If no key is configured, the copilot returns extractive local answers and predefined safe SQL metric results.
 
 ## SQL Safety
 

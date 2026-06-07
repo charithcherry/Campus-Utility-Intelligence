@@ -107,3 +107,9 @@ The simulator is peak-only by default and does not claim real-time control, util
 Feature 19 adds an analytics copilot, but it does not embed raw meter rows or execute arbitrary SQL. Documentation questions use retrieved project docs. Metric questions use predefined read-only SQL routes and the SQL safety layer blocks mutating statements.
 
 Gemini is optional and configured only through environment variables. API keys must stay out of git. If Gemini is unavailable, the copilot still returns local extractive answers and SQL result previews.
+
+## 2026-06-07: Upgrade copilot to Gemini tool calling
+
+Feature 20 routes Gemini-enabled copilot questions through a local tool-calling loop. Gemini can retrieve project docs, list tables, describe tables, run safe read-only SQL, and request a project snapshot before answering.
+
+The agent still must stay grounded in tool outputs. It must not invent metrics, emissions factors, row counts, or optimization claims. If `GEMINI_API_KEY` is missing or Gemini fails, the dashboard falls back to local retrieval and predefined read-only metric SQL.

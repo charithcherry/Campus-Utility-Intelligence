@@ -15,6 +15,20 @@ def test_validate_readonly_select_blocks_mutating_sql():
         validate_readonly_select("DROP TABLE gold.gold_peak_demand")
 
 
+def test_validate_readonly_select_allows_cte_query():
+    sql = validate_readonly_select(
+        """
+        WITH example AS (
+            SELECT 1 AS value
+        )
+        SELECT value FROM example
+        """
+    )
+
+    assert sql.startswith("WITH example")
+    assert sql.endswith("LIMIT 50")
+
+
 def test_validate_readonly_select_blocks_multi_statement_sql():
     with pytest.raises(ValueError, match="Only one SQL statement"):
         validate_readonly_select("SELECT 1; SELECT 2")

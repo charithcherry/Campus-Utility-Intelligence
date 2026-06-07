@@ -3,21 +3,20 @@
 from __future__ import annotations
 
 import argparse
-import json
-import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from urllib import request
 
 import pandas as pd
 
 from campus_utility.config import get_config
 from campus_utility.doc_index import SearchResult, build_document_index, search_document_index
+from campus_utility.gemini_agent import (
+    ToolCallTrace,
+    gemini_is_configured,
+    run_gemini_agent,
+)
 from campus_utility.sql_safety import execute_readonly_query
-
-DEFAULT_GEMINI_MODEL = "gemini-3.5-flash"
-GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
 
 @dataclass(frozen=True)
@@ -30,10 +29,30 @@ class CopilotResponse:
     sql: str | None
     data: pd.DataFrame | None
     used_model: str | None = None
+    tool_calls: list[ToolCallTrace] | None = None
+    gemini_enabled: bool = False
+    fallback_reason: str | None = None
 
 
 def answer_question(question: str, project_root: Path, db_path: Path) -> CopilotResponse:
     """Answer a documentation or metric question."""
+
+    fallback_reason = "Gemini mode disabled because GEMINI_API_KEY is not configured."
+    if gemini_is_configured():
+        try:
+            agent_response = run_gemini_agent(question, project_root, db_path)
+            return CopilotResponse(
+                mode="gemini_tool_agent",
+                answer=agent_response.answer,
+                sources=_sources_from_tool_calls(agent_response.tool_calls),
+                sql="\n\n".join(agent_response.sql_queries) or None,
+                data=_first_sql_dataframe(agent_response.tool_calls),
+                used_model=agent_response.model,
+                tool_calls=agent_response.tool_calls,
+                gemini_enabled=True,
+            )
+        except Exception as exc:  # noqa: BLE001 - fallback keeps dashboard usable
+            fallback_reason = f"Gemini tool agent failed: {exc}"
 
     metric_sql = _metric_question_to_sql(question)
     if metric_sql:
@@ -45,7 +64,9 @@ def answer_question(question: str, project_root: Path, db_path: Path) -> Copilot
             sources=[],
             sql=safe_sql,
             data=data,
-            used_model=_configured_gemini_model() if _has_gemini_key() else None,
+            used_model=None,
+            gemini_enabled=False,
+            fallback_reason=fallback_reason,
         )
 
     index = build_document_index(project_root)
@@ -60,6 +81,8 @@ def answer_question(question: str, project_root: Path, db_path: Path) -> Copilot
             sources=[],
             sql=None,
             data=None,
+            gemini_enabled=False,
+            fallback_reason=fallback_reason,
         )
 
     snippets = _format_source_snippets(sources)
@@ -70,7 +93,9 @@ def answer_question(question: str, project_root: Path, db_path: Path) -> Copilot
         sources=sources,
         sql=None,
         data=None,
-        used_model=_configured_gemini_model() if _has_gemini_key() else None,
+        used_model=None,
+        gemini_enabled=False,
+        fallback_reason=fallback_reason,
     )
 
 
@@ -146,26 +171,13 @@ def _extract_table_name(text: str) -> str | None:
 
 
 def _generate_documentation_answer(question: str, snippets: str) -> str:
-    if not _has_gemini_key():
-        return f"Relevant project documentation:\n\n{snippets}"
-    prompt = (
-        "Answer the user question using only the provided Campus Utility Intelligence "
-        "documentation snippets. Be concise. If the snippets do not support an answer, say so.\n\n"
-        f"Question: {question}\n\nDocumentation snippets:\n{snippets}"
-    )
-    return _call_gemini(prompt)
+    _ = question
+    return f"Relevant project documentation:\n\n{snippets}"
 
 
 def _generate_metric_answer(question: str, sql: str, data: pd.DataFrame) -> str:
-    preview = data.head(10).to_csv(index=False)
-    if not _has_gemini_key():
-        return "Answered with a safe read-only DuckDB query."
-    prompt = (
-        "Answer the metric question using only this SQL query and result preview. "
-        "Do not invent extra values. Keep the answer concise.\n\n"
-        f"Question: {question}\n\nSQL:\n{sql}\n\nResult preview:\n{preview}"
-    )
-    return _call_gemini(prompt)
+    _ = question, sql, data
+    return "Answered with a safe read-only DuckDB query."
 
 
 def _format_source_snippets(sources: list[SearchResult]) -> str:
@@ -175,50 +187,31 @@ def _format_source_snippets(sources: list[SearchResult]) -> str:
     )
 
 
-def _has_gemini_key() -> bool:
-    return bool(os.getenv("GEMINI_API_KEY"))
+def _sources_from_tool_calls(tool_calls: list[ToolCallTrace]) -> list[SearchResult]:
+    sources: list[SearchResult] = []
+    for call in tool_calls:
+        if call.name != "retrieve_project_docs":
+            continue
+        for result in call.result.get("results", []):
+            sources.append(
+                SearchResult(
+                    source_path=result["source"],
+                    heading=result["section"],
+                    text=result["text"],
+                    score=float(result.get("score", 0)),
+                )
+            )
+    return sources
 
 
-def _configured_gemini_model() -> str:
-    return os.getenv("GEMINI_MODEL", DEFAULT_GEMINI_MODEL)
-
-
-def _call_gemini(prompt: str) -> str:
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY is not configured")
-
-    model = _configured_gemini_model()
-    url = f"{GEMINI_API_URL.format(model=model)}?key={api_key}"
-    payload = {
-        "contents": [
-            {
-                "parts": [
-                    {
-                        "text": prompt,
-                    }
-                ]
-            }
-        ],
-        "generationConfig": {
-            "temperature": 0.1,
-            "maxOutputTokens": 500,
-        },
-    }
-    request_body = json.dumps(payload).encode("utf-8")
-    http_request = request.Request(
-        url,
-        data=request_body,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
-    with request.urlopen(http_request, timeout=20) as response:  # noqa: S310
-        response_payload = json.loads(response.read().decode("utf-8"))
-    candidates = response_payload.get("candidates", [])
-    if not candidates:
-        return "Gemini returned no answer."
-    parts = candidates[0].get("content", {}).get("parts", [])
-    return "\n".join(part.get("text", "") for part in parts).strip()
+def _first_sql_dataframe(tool_calls: list[ToolCallTrace]) -> pd.DataFrame | None:
+    for call in tool_calls:
+        if call.name != "run_read_only_sql":
+            continue
+        rows = call.result.get("rows", [])
+        if rows:
+            return pd.DataFrame(rows)
+    return None
 
 
 def main() -> None:

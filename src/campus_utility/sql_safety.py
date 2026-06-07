@@ -11,6 +11,7 @@ import pandas as pd
 BLOCKED_SQL_TOKENS = {
     "alter",
     "attach",
+    "call",
     "copy",
     "create",
     "delete",
@@ -34,7 +35,8 @@ def validate_readonly_select(sql: str, default_limit: int = 50) -> str:
         raise ValueError("SQL query is empty")
     if ";" in normalized:
         raise ValueError("Only one SQL statement is allowed")
-    if not normalized.lower().startswith("select "):
+    lowered = normalized.lower()
+    if not (lowered.startswith("select ") or lowered.startswith("with ")):
         raise ValueError("Only SELECT statements are allowed")
 
     tokens = set(re.findall(r"[a-zA-Z_]+", normalized.lower()))

@@ -35,7 +35,7 @@ def test_answer_question_routes_documentation_question_to_sources(tmp_path, monk
     assert "README.md" in response.answer
 
 
-def test_answer_question_uses_configured_gemini_for_docs(tmp_path, monkeypatch):
+def test_answer_question_uses_gemini_tool_agent_when_configured(tmp_path, monkeypatch):
     db_path = _create_copilot_test_database(tmp_path)
     (tmp_path / "README.md").write_text(
         "# Campus Utility Intelligence\n\nScope 2 emissions use a DCCEEW factor.",
@@ -43,12 +43,24 @@ def test_answer_question_uses_configured_gemini_for_docs(tmp_path, monkeypatch):
     )
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
     monkeypatch.setenv("GEMINI_MODEL", "gemini-3.5-flash")
-    monkeypatch.setattr("campus_utility.copilot._call_gemini", lambda prompt: "Gemini answer")
+
+    class FakeGeminiResponse:
+        answer = "Gemini answer"
+        model = "gemini-3.5-flash"
+        tool_calls = []
+        sql_queries = []
+
+    monkeypatch.setattr(
+        "campus_utility.copilot.run_gemini_agent",
+        lambda question, project_root, db_path: FakeGeminiResponse(),
+    )
 
     response = answer_question("How are Scope 2 emissions estimated?", tmp_path, db_path)
 
+    assert response.mode == "gemini_tool_agent"
     assert response.answer == "Gemini answer"
     assert response.used_model == "gemini-3.5-flash"
+    assert response.gemini_enabled is True
 
 
 def test_run_copilot_check_passes(tmp_path, monkeypatch):

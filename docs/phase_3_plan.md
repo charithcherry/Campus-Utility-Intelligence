@@ -39,7 +39,8 @@ Current limitation: emissions use a static factor. Same-day peak shifting does n
 2. Feature 17: Demand-Response Event Simulator: implemented
 3. Feature 18: Demand-Response Dashboard and Scenario Polish: implemented
 4. Feature 19: Documentation-Aware Analytics Copilot: implemented
-5. Stop for review before considering forecasting or anomaly workbench
+5. Feature 20: Gemini Tool-Calling Analytics Agent: implemented
+6. Stop for review before considering forecasting or anomaly workbench
 
 ## Feature 16: Time-Varying Carbon Intensity Layer
 
@@ -174,7 +175,7 @@ Implemented behavior:
 - Routes supported metric questions to safe read-only SQL.
 - Blocks unsafe SQL.
 - Adds an `Analytics Copilot` dashboard page.
-- Uses Gemini through `GEMINI_API_KEY` and `GEMINI_MODEL` when configured; otherwise returns local extractive answers.
+- Uses local fallback behavior when Gemini is not configured.
 
 Command:
 
@@ -188,7 +189,33 @@ Suggested commit:
 feat: add documentation-aware analytics copilot
 ```
 
-## Feature 20: Forecasting And Peak-Risk Alerts
+## Feature 20: Gemini Tool-Calling Analytics Agent
+
+Status: implemented.
+
+Goal: upgrade the analytics copilot into a Gemini agent that can choose project-document retrieval, table inspection, project snapshot, and safe read-only SQL tools before answering.
+
+Implemented behavior:
+
+- Every Gemini-enabled question goes through the Gemini tool-calling loop.
+- Available tools are `retrieve_project_docs`, `list_tables`, `describe_table`, `run_read_only_sql`, and `get_project_snapshot`.
+- The dashboard shows Gemini mode status, final answer, tool calls made, SQL used, result preview, retrieved sources, and safety notes.
+- If `GEMINI_API_KEY` is missing or Gemini fails, the copilot falls back to local retrieval and predefined metric SQL routes.
+- SQL remains read-only and blocks mutating statements.
+
+Command:
+
+```bash
+make copilot-check
+```
+
+Suggested commit:
+
+```text
+feat: upgrade copilot to Gemini tool-calling agent
+```
+
+## Feature 21: Forecasting And Peak-Risk Alerts
 
 Status: planned.
 

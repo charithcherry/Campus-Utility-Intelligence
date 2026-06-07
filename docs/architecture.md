@@ -76,8 +76,10 @@ This is not real-time grid control and does not imply participation in a utility
 
 ## Analytics Copilot
 
-Feature 19 adds a documentation-aware analytics copilot.
+Feature 19 added a documentation-aware analytics copilot. Feature 20 upgrades it into a Gemini tool-calling analytics agent.
 
-The copilot retrieves project knowledge from README, docs, feature notes, final reviews, and local markdown reports when present. It does not embed raw meter rows. Metric questions are answered through predefined safe read-only DuckDB SQL routes.
+The copilot retrieves project knowledge from README, docs, feature notes, final reviews, and local markdown reports when present. It does not embed raw meter rows.
 
-Gemini can summarize retrieved snippets or SQL result previews when `GEMINI_API_KEY` is configured. Without a key, the copilot returns local extractive answers.
+When `GEMINI_API_KEY` is configured, Gemini can call local tools to retrieve docs, list tables, describe tables, run safe read-only SQL, and read a project snapshot. Without a key, or if Gemini fails, the copilot returns local extractive answers and predefined safe SQL metric results.
+
+The SQL tool accepts only one read-only `SELECT` or `WITH ... SELECT` statement and blocks mutating tokens. The dashboard displays Gemini mode status, tool calls made, SQL used, result previews, retrieved sources, and safety notes.
