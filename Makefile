@@ -24,7 +24,7 @@ ingest:
 	$(PYTHON) -m campus_utility.ingestion
 
 transform:
-	@echo "Silver and gold transformation workflow will be implemented in later features."
+	$(PYTHON) -m campus_utility.transformations
 
 quality:
 	@echo "Data-quality checks will be implemented in Feature 5."

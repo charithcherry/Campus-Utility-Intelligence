@@ -15,3 +15,9 @@ Feature 1 establishes the repository structure only. Data ingestion and transfor
 Feature 3 loads raw files into `data/processed/campus_utility.duckdb` under the DuckDB `bronze` schema.
 
 Bronze tables preserve source columns with minimal transformation. Cleaning, standardization, and business rules are deferred to silver and gold layers.
+
+## Silver Layer
+
+Feature 4 creates cleaned electricity tables in the DuckDB `silver` schema.
+
+The silver layer standardizes required ID fields, timestamps, and numeric reading columns. It filters missing required values, removes negative consumption rows, and deduplicates repeated meter/timestamp records.

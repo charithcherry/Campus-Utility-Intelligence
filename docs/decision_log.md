@@ -21,3 +21,9 @@ Some raw timestamp fields include timezone offsets while others do not. Profilin
 Bronze ingestion loads raw CSV files directly with DuckDB `read_csv_auto`. The loader treats `N/A` as null and uses full-file sampling because `building_submeter_consumption.csv` contains `N/A` values in columns that otherwise look numeric.
 
 DuckDB inferred some bronze columns as `VARCHAR` where raw values are mixed. That is acceptable in bronze because cleaning and type enforcement belong in the silver layer.
+
+## 2026-06-06: Keep silver electricity sources separate
+
+Silver cleaning creates separate building, NMI, and submeter electricity tables. The raw sources have different grains and measurement columns, so combining them now would hide source-specific meaning.
+
+Rows with missing required IDs, missing timestamps, missing consumption, or negative consumption are excluded from silver. Repeated meter/timestamp rows are deduplicated with `ROW_NUMBER`.

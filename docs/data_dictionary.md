@@ -50,3 +50,13 @@ Bronze tables are stored in `data/processed/campus_utility.duckdb` under the `br
 | `bronze.bronze_weather_data` | `weather_data.csv` |
 
 DuckDB inferred source types during bronze ingestion. Final cleaned data types will be defined in silver.
+
+## Silver Electricity Tables
+
+| Silver Table | Grain | Key Columns |
+| --- | --- | --- |
+| `silver.silver_building_electricity_readings` | One building meter reading per campus, meter, and timestamp | `campus_id`, `meter_id`, `reading_timestamp` |
+| `silver.silver_nmi_electricity_readings` | One NMI meter reading per campus, meter, and timestamp | `campus_id`, `meter_id`, `reading_timestamp` |
+| `silver.silver_submeter_electricity_readings` | One submeter reading per campus, building, meter, and timestamp | `campus_id`, `building_id`, `meter_id`, `reading_timestamp` |
+
+Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, `consumption`, and `source_system`. NMI readings also include `demand_kw` and `demand_kva`. Submeter readings also include `current`, `voltage`, `power`, and `power_factor`.
