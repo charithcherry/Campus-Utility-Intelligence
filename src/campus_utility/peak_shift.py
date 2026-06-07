@@ -117,6 +117,17 @@ def build_peak_shift_simulation(
                     ) AS shifted_consumption
                 FROM peak_low
                 CROSS JOIN flexible_load
+            ),
+            simulated_hourly AS (
+                SELECT
+                    *,
+                    baseline_peak_consumption - shifted_consumption AS simulated_peak_hour_consumption,
+                    baseline_target_consumption + shifted_consumption AS simulated_target_hour_consumption,
+                    baseline_daily_consumption - baseline_peak_consumption - baseline_target_consumption
+                        + (baseline_peak_consumption - shifted_consumption)
+                        + (baseline_target_consumption + shifted_consumption)
+                        AS simulated_daily_consumption
+                FROM simulated
             )
             SELECT
                 simulation_id,
@@ -134,19 +145,36 @@ def build_peak_shift_simulation(
                 baseline_peak_consumption,
                 baseline_target_consumption,
                 shifted_consumption,
-                baseline_peak_consumption - shifted_consumption AS simulated_peak_consumption,
-                shifted_consumption AS peak_reduction,
+                GREATEST(
+                    simulated_peak_hour_consumption,
+                    simulated_target_hour_consumption
+                ) AS simulated_peak_consumption,
+                baseline_peak_consumption - GREATEST(
+                    simulated_peak_hour_consumption,
+                    simulated_target_hour_consumption
+                ) AS peak_reduction,
                 CASE
                     WHEN baseline_peak_consumption = 0 THEN NULL
-                    ELSE shifted_consumption / baseline_peak_consumption
+                    ELSE (
+                        baseline_peak_consumption - GREATEST(
+                            simulated_peak_hour_consumption,
+                            simulated_target_hour_consumption
+                        )
+                    ) / baseline_peak_consumption
                 END AS peak_reduction_percent,
-                baseline_daily_consumption AS simulated_daily_consumption,
-                ABS(baseline_daily_consumption - baseline_daily_consumption) < 0.0001
+                simulated_daily_consumption,
+                ABS(baseline_daily_consumption - simulated_daily_consumption) < 0.0001
                     AS total_energy_preserved,
-                FALSE AS negative_usage_created,
+                simulated_peak_hour_consumption < 0 OR simulated_target_hour_consumption < 0
+                    AS negative_usage_created,
                 'Hourly consumption is used as a peak-load proxy. Static emissions factor: same-day load shifting preserves total kWh, so estimated emissions are unchanged.' AS notes
-            FROM simulated
-            WHERE baseline_peak_consumption - shifted_consumption >= 0
+            FROM simulated_hourly
+            WHERE simulated_peak_hour_consumption >= 0
+              AND simulated_target_hour_consumption >= 0
+              AND baseline_peak_consumption >= GREATEST(
+                    simulated_peak_hour_consumption,
+                    simulated_target_hour_consumption
+                  )
             """
         )
         row_count, max_peak_reduction, energy_failures = connection.execute(

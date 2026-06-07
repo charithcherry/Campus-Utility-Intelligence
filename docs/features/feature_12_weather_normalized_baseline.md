@@ -54,4 +54,4 @@ The model is a simple grouped-median baseline, not a predictive machine-learning
 
 ## Next Steps
 
-Implement Feature 13: Carbon-aware peak-shifting simulator.
+Implement Feature 13: peak-shifting simulator.

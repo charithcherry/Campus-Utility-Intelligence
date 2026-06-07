@@ -101,9 +101,9 @@ Suggested commit:
 feat: add weather-normalized usage baseline
 ```
 
-## Feature 13: Carbon-Aware Peak-Shifting Simulator
+## Feature 13: Peak-Shifting Simulator
 
-Goal: add an offline simulation that estimates peak-demand and emissions impact from shifting configurable flexible load.
+Goal: add an offline simulation that estimates peak-demand impact from shifting configurable flexible load.
 
 Expected behavior:
 
@@ -112,7 +112,7 @@ Expected behavior:
 - Preserve total daily energy.
 - Avoid negative usage.
 - Estimate before/after peak demand.
-- Estimate emissions impact only when factor granularity makes it meaningful.
+- Do not claim emissions reduction under the current static emissions factor.
 
 Suggested command:
 
@@ -137,7 +137,7 @@ Expected dashboard additions:
 - Efficiency opportunity score
 - Peak-shifting simulation before/after results
 - Peak reduction summary
-- Estimated emissions impact, if meaningful
+- Estimated emissions context, without reduction claims under the static factor
 
 Suggested commit:
 
@@ -176,4 +176,4 @@ The review should include commands run, test results, new tables, new reports, d
 
 If all phase 2 features are implemented truthfully, the project should support:
 
-> Campus Utility Intelligence: Built a Python/SQL sustainability analytics mart over Kaggle UNICON utility data with DuckDB gold tables, data-quality checks, peak-demand analysis, configurable emissions-factor modeling, weather-normalized efficiency scoring, carbon-aware peak-shifting simulations, SQL analytics, NMI/building reconciliation, and a Streamlit dashboard.
+> Campus Utility Intelligence: Built a Python/SQL sustainability analytics mart over Kaggle UNICON utility data with DuckDB gold tables, data-quality checks, peak-demand analysis, configurable emissions-factor modeling, weather-normalized efficiency scoring, peak-shifting simulations, SQL analytics, NMI/building reconciliation, and a Streamlit dashboard.

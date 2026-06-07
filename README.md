@@ -2,14 +2,14 @@
 
 Campus Utility Intelligence is a local Python, SQL, DuckDB, and Streamlit analytics project for campus electricity usage data.
 
-Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, and a local Streamlit dashboard are implemented.
+Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, peak-shifting simulation, and a local Streamlit dashboard are implemented.
 
 ## What Is Implemented
 
 - Python package scaffold under `src/campus_utility/`
 - Local configuration defaults for raw data and DuckDB output paths
-- Makefile commands for installation, tests, linting, and future workflow entry points
-- Placeholder Streamlit dashboard entry point
+- Makefile commands for installation, tests, linting, data pipelines, analytics, simulation, and dashboard launch
+- Local Streamlit dashboard entry point
 - Documentation structure for architecture, data dictionary, validation rules, decision log, and feature notes
 - Git ignore rules for raw data, generated data, reports, caches, virtual environments, and local secrets
 - Raw data profiling workflow that writes `reports/profile_report.md`
@@ -160,12 +160,6 @@ make download-data
 
 This requires Kaggle API credentials at `~/.kaggle/kaggle.json`.
 
-Run the placeholder dashboard:
-
-```bash
-make dashboard
-```
-
 ## Data Handling
 
 Raw Kaggle files should be placed under `data/raw/`. Raw data and generated outputs are ignored by git.
@@ -178,7 +172,7 @@ Estimated emissions use configurable reference factors. The included factor is a
 
 ## Final Review
 
-See `docs/final_review.md` for the end-to-end validation summary, data outcomes, known limitations, and resume alignment.
+See `docs/final_review.md` for the first end-to-end validation summary. See `docs/final_review_phase_2.md` for the completed Phase 2 validation summary, decision-support outputs, limitations, and resume alignment.
 
 ## Phase 2 Plan
 
@@ -186,5 +180,5 @@ See `docs/phase_2_plan.md` for the next sustainability intelligence features:
 
 - Australia-aware emissions factor reference data
 - Weather-normalized energy baseline
-- Carbon-aware peak-shifting simulator
+- Peak-shifting simulator
 - Dashboard extensions
