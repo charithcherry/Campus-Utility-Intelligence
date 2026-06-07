@@ -52,6 +52,12 @@ The preferred official source for a static Australia factor is DCCEEW's National
 
 The DCCEEW 2025 Victoria Scope 2 factor is used as the project default across historical usage years because year-specific historical factors are not included in the repository.
 
+## 2026-06-07: Use grouped median weather baseline
+
+Feature 12 uses an explainable grouped median baseline instead of a black-box model. Expected usage is grouped by campus, source, meter, optional building, hour of day, day of week, month, and 5-degree Celsius temperature band.
+
+High-usage candidates are investigation leads, not confirmed waste, faults, or savings.
+
 ## 2026-06-06: Store analytics queries as SQL files
 
 Reusable analytics questions live in `sql/marts/` instead of being embedded only in Python. This keeps SQL visible for review and easier to reuse in dashboards later.

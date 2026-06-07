@@ -45,3 +45,9 @@ This is a diagnostic layer for source alignment. It does not assume NMI and buil
 Feature 10 adds a local Streamlit dashboard over DuckDB gold tables.
 
 The dashboard uses the existing gold outputs for usage trends, peak demand, estimated emissions, and NMI/building reconciliation.
+
+## Weather-Normalized Baseline
+
+Feature 12 joins hourly electricity usage to campus weather and creates `gold.gold_weather_normalized_usage`.
+
+The model is an explainable grouped median baseline by campus, source, meter, optional building, hour, day of week, month, and temperature band.

@@ -69,6 +69,15 @@ Feature 8 validates that SQL files can run against DuckDB and write markdown out
 
 The real `make analytics` run should happen after `make metrics` and `make emissions`.
 
+## Weather Baseline Validation
+
+Feature 12 validates the weather baseline with tests that confirm:
+
+- Weather data joins to hourly usage using real available columns
+- Expected usage is calculated
+- Residual consumption and residual percent are calculated
+- High-usage candidate flags and opportunity scores are calculated
+
 ## Reconciliation Validation
 
 Feature 9 validates NMI/building reconciliation with unit tests that confirm:

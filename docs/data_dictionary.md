@@ -72,12 +72,25 @@ Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, 
 | `gold.gold_electricity_emissions` | Campus, source, and month | Estimated emissions from monthly usage |
 | `gold.gold_daily_nmi_building_reconciliation` | Campus and date | Daily NMI usage compared with summed building usage |
 | `gold.gold_monthly_nmi_building_reconciliation` | Campus and month | Monthly NMI usage compared with summed building usage |
+| `gold.gold_weather_normalized_usage` | Campus, source, meter, optional building, and hour | Actual vs expected usage after weather/time normalization |
 
 Reconciliation columns include NMI consumption, building consumption, absolute difference, and difference ratio to NMI. They do not identify the physical cause of the difference.
 
 ## Dashboard Views
 
 The local dashboard reads from gold usage, peak-demand, emissions, and reconciliation tables. It does not create new data tables.
+
+## Weather Baseline Columns
+
+| Column | Meaning |
+| --- | --- |
+| `actual_consumption` | Observed hourly electricity usage |
+| `expected_consumption` | Grouped median expected usage for similar weather/time conditions |
+| `residual_consumption` | Actual minus expected usage |
+| `residual_percent` | Residual divided by expected usage |
+| `is_high_usage_candidate` | Flag for records at least 25% above expected usage |
+| `efficiency_opportunity_score` | Bounded score from positive residual percent |
+| `baseline_model_version` | Baseline method identifier |
 
 ## Emissions Factor Reference
 
