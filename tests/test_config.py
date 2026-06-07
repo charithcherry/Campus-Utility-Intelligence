@@ -6,8 +6,10 @@ from campus_utility.config import get_config
 def test_get_config_uses_defaults(monkeypatch):
     monkeypatch.delenv("CAMPUS_UTILITY_RAW_DIR", raising=False)
     monkeypatch.delenv("CAMPUS_UTILITY_DB_PATH", raising=False)
+    monkeypatch.delenv("CAMPUS_ELECTRICITY_EMISSIONS_FACTOR_KG_CO2E_PER_UNIT", raising=False)
 
     config = get_config()
 
     assert config.raw_dir == Path("data/raw")
     assert config.db_path == Path("data/processed/campus_utility.duckdb")
+    assert config.electricity_emissions_factor_kg_co2e_per_unit == 0.79

@@ -47,3 +47,11 @@ The command exits with an error if any required check fails.
 Feature 6 validates gold metrics with unit tests that check hourly aggregation and NMI peak-demand selection.
 
 Gold tables should be regenerated after `make transform` and `make quality`.
+
+## Emissions Metrics Validation
+
+Feature 7 validates emissions calculations with unit tests that confirm:
+
+- The emissions table is created from monthly usage
+- The configured emissions factor is stored on each row
+- Estimated emissions equal usage multiplied by the factor

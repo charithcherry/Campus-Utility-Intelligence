@@ -13,6 +13,7 @@ class ProjectConfig:
 
     raw_dir: Path
     db_path: Path
+    electricity_emissions_factor_kg_co2e_per_unit: float
 
 
 def get_config() -> ProjectConfig:
@@ -21,4 +22,7 @@ def get_config() -> ProjectConfig:
     return ProjectConfig(
         raw_dir=Path(os.getenv("CAMPUS_UTILITY_RAW_DIR", "data/raw")),
         db_path=Path(os.getenv("CAMPUS_UTILITY_DB_PATH", "data/processed/campus_utility.duckdb")),
+        electricity_emissions_factor_kg_co2e_per_unit=float(
+            os.getenv("CAMPUS_ELECTRICITY_EMISSIONS_FACTOR_KG_CO2E_PER_UNIT", "0.79")
+        ),
     )

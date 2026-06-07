@@ -35,3 +35,9 @@ Submeter deduplication uses the normalized output timestamp because timezone-awa
 Gold usage metrics aggregate building, NMI, and submeter readings together only after keeping `source_system`. This avoids hiding differences in source grain while still supporting cross-source reporting.
 
 Peak demand is calculated from NMI readings because NMI silver data includes `demand_kw` and `demand_kva`.
+
+## 2026-06-06: Use configurable emissions factor
+
+Estimated emissions multiply monthly electricity usage by `CAMPUS_ELECTRICITY_EMISSIONS_FACTOR_KG_CO2E_PER_UNIT`.
+
+The default value is `0.79` kg CO2e per usage unit. This is treated as a configurable estimate, not an official project-specific factor.

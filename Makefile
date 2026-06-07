@@ -2,7 +2,7 @@ VENV ?= .venv
 PYTHON ?= $(VENV)/bin/python
 SYSTEM_PYTHON ?= python3.12
 
-.PHONY: install test lint download-data profile ingest transform quality metrics dashboard clean
+.PHONY: install test lint download-data profile ingest transform quality metrics emissions dashboard clean
 
 install:
 	$(SYSTEM_PYTHON) -m venv $(VENV)
@@ -31,6 +31,9 @@ quality:
 
 metrics:
 	$(PYTHON) -m campus_utility.metrics
+
+emissions:
+	$(PYTHON) -m campus_utility.emissions
 
 dashboard:
 	$(VENV)/bin/streamlit run dashboard/app.py
