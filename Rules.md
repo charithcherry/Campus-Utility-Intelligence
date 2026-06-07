@@ -34,6 +34,7 @@
    * Outcome
    * What happened to the data
    * Next step
+9. If the user says "shazam" in a request, answer crisply without examples.
 
 ## Agent Workflow
 
