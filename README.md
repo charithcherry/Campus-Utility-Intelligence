@@ -142,3 +142,7 @@ The profiling workflow currently supports `.csv`, `.json`, `.jsonl`, and `.parqu
 ## Known Limitations
 
 Estimated emissions use a configurable factor and should be replaced if an official project-specific factor is required. The dashboard is local only and is not deployed.
+
+## Final Review
+
+See `docs/final_review.md` for the end-to-end validation summary, data outcomes, known limitations, and resume alignment.
