@@ -53,3 +53,7 @@ NMI readings include `campus_id` and `meter_id`, but not `building_id`. Reconcil
 Differences are treated as diagnostics, not automatic corruption, because NMI and building meters may have different coverage.
 
 The dataset can quantify NMI/building differences, but it cannot directly attribute those differences to specific load categories such as street lighting or outdoor infrastructure because those labels are not present in the current reconciliation inputs.
+
+## 2026-06-06: Keep dashboard local
+
+The dashboard runs locally with Streamlit and reads from the DuckDB warehouse. It is not deployed and does not claim real-time refresh.

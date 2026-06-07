@@ -39,3 +39,9 @@ The analytics runner executes those queries against DuckDB and writes markdown o
 Feature 9 compares campus-level NMI electricity totals against summed campus-level building meter totals.
 
 This is a diagnostic layer for source alignment. It does not assume NMI and building readings should always match.
+
+## Dashboard
+
+Feature 10 adds a local Streamlit dashboard over DuckDB gold tables.
+
+The dashboard uses the existing gold outputs for usage trends, peak demand, estimated emissions, and NMI/building reconciliation.

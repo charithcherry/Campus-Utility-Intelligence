@@ -75,6 +75,10 @@ Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, 
 
 Reconciliation columns include NMI consumption, building consumption, absolute difference, and difference ratio to NMI. They do not identify the physical cause of the difference.
 
+## Dashboard Views
+
+The local dashboard reads from gold usage, peak-demand, emissions, and reconciliation tables. It does not create new data tables.
+
 ## SQL Analytics Outputs
 
 | Query | Purpose |
