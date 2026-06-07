@@ -2,7 +2,7 @@
 
 Campus Utility Intelligence is a local Python, SQL, DuckDB, and Streamlit analytics project for campus electricity usage data.
 
-Current status: project setup is implemented. Data profiling, ingestion, transformations, analytics marts, quality checks, and dashboard views are planned future features.
+Current status: project setup, Kaggle download, raw profiling, and bronze ingestion are implemented. Cleaning, analytics marts, quality checks, and dashboard views are planned future features.
 
 ## What Is Implemented
 
@@ -14,6 +14,7 @@ Current status: project setup is implemented. Data profiling, ingestion, transfo
 - Git ignore rules for raw data, generated data, reports, caches, virtual environments, and local secrets
 - Raw data profiling workflow that writes `reports/profile_report.md`
 - Kaggle download command for the UNICON dataset
+- Bronze ingestion workflow that loads raw files into DuckDB
 
 ## Project Layout
 
@@ -55,6 +56,14 @@ Profile raw data:
 make profile
 ```
 
+Ingest raw data into DuckDB bronze tables:
+
+```bash
+make ingest
+```
+
+This creates `data/processed/campus_utility.duckdb` and `reports/bronze_ingestion_report.md`.
+
 Download the UNICON dataset from Kaggle:
 
 ```bash
@@ -77,4 +86,4 @@ The profiling workflow currently supports `.csv`, `.json`, `.jsonl`, and `.parqu
 
 ## Known Limitations
 
-This repository does not yet ingest or transform the Kaggle UNICON dataset. Profiling is implemented, but no actual raw data has been profiled in this workspace yet.
+This repository does not yet clean or transform the Kaggle UNICON dataset. Bronze ingestion is implemented, but silver cleaned tables and gold marts are future work.

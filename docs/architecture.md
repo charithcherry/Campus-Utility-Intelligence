@@ -9,3 +9,9 @@ Campus Utility Intelligence will use a local medallion-style analytics architect
 5. SQL analytics and Streamlit dashboard views
 
 Feature 1 establishes the repository structure only. Data ingestion and transformations are planned future features.
+
+## Bronze Layer
+
+Feature 3 loads raw files into `data/processed/campus_utility.duckdb` under the DuckDB `bronze` schema.
+
+Bronze tables preserve source columns with minimal transformation. Cleaning, standardization, and business rules are deferred to silver and gold layers.

@@ -30,3 +30,23 @@ The first implementation scope is electricity only. Based on raw profiling, like
 - `campus_meta.csv`
 
 No units are assumed yet. Unit meaning will be validated during bronze and silver implementation.
+
+## Bronze Tables
+
+Bronze tables are stored in `data/processed/campus_utility.duckdb` under the `bronze` schema.
+
+| Bronze Table | Source File |
+| --- | --- |
+| `bronze.bronze_building_consumption` | `building_consumption.csv` |
+| `bronze.bronze_building_meta` | `building_meta.csv` |
+| `bronze.bronze_building_submeter_consumption` | `building_submeter_consumption.csv` |
+| `bronze.bronze_calender` | `calender.csv` |
+| `bronze.bronze_campus_meta` | `campus_meta.csv` |
+| `bronze.bronze_events` | `events.csv` |
+| `bronze.bronze_gas_consumption` | `gas_consumption.csv` |
+| `bronze.bronze_nmi_consumption` | `nmi_consumption.csv` |
+| `bronze.bronze_nmi_meta` | `nmi_meta.csv` |
+| `bronze.bronze_water_consumption` | `water_consumption.csv` |
+| `bronze.bronze_weather_data` | `weather_data.csv` |
+
+DuckDB inferred source types during bronze ingestion. Final cleaned data types will be defined in silver.

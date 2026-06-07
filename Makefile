@@ -21,7 +21,7 @@ profile:
 	$(PYTHON) -m campus_utility.profiling
 
 ingest:
-	@echo "Bronze ingestion workflow will be implemented in Feature 3."
+	$(PYTHON) -m campus_utility.ingestion
 
 transform:
 	@echo "Silver and gold transformation workflow will be implemented in later features."
