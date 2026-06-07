@@ -45,6 +45,8 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 
 ![Analytics copilot dashboard](images/analytics_copilot.png)
 
+Peak-shifting and demand-response screenshots can be added here after those dashboard views are captured.
+
 ## Project Layout
 
 ```text
@@ -225,7 +227,7 @@ Estimated emissions use configurable reference factors. The included factor is a
 
 ## Final Review
 
-See `docs/final_review.md` for the first end-to-end validation summary. See `docs/final_review_phase_2.md` for the completed Phase 2 validation summary. See `docs/final_review_phase_3.md` for the final Phase 3 validation summary, grid-aware simulation outputs, limitations, and resume alignment.
+See `docs/final_review.md` for the first end-to-end validation summary. See `docs/final_review_phase_2.md` for the completed Phase 2 validation summary. See `docs/final_review_phase_3.md` for the final Phase 3 validation summary, grid-aware simulation outputs, limitations, and resume alignment. See `docs/final_review_phase_4.md` for Gemini tool-calling copilot validation and final repository polish.
 
 ## Future Work
 

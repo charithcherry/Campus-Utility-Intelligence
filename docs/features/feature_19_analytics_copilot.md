@@ -34,7 +34,9 @@ The copilot supports two paths:
 
 The copilot does not embed raw electricity rows. Raw, silver, and gold data stay in DuckDB.
 
-Gemini integration was upgraded in Feature 20. The current implementation routes Gemini-enabled questions through a tool-calling agent. If no key is configured, the copilot returns extractive local answers and predefined safe SQL metric results.
+Feature 19 introduced the local documentation-aware copilot and safe predefined metric routes.
+
+Superseded by Feature 20 for Gemini tool-calling behavior. Local fallback still uses predefined safe metric routes when Gemini is unavailable or not configured.
 
 ## SQL Safety
 
