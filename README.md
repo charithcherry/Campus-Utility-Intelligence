@@ -109,6 +109,8 @@ By default, emissions factors are loaded from `data/reference/emissions_factors_
 CAMPUS_EMISSIONS_FACTORS_PATH=/path/to/factors.csv make emissions
 ```
 
+For a verified Australia factor, use an official source such as DCCEEW's National Greenhouse Accounts Factors and load it through the CSV workflow. The included factor is only a demo fallback estimate.
+
 Run SQL analytics queries:
 
 ```bash

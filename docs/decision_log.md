@@ -48,6 +48,8 @@ Feature 11 replaces the single numeric-only emissions factor workflow with a CSV
 
 Factor selection prefers source-specific matches over wildcard matches and exact-year factors over older factors. Missing source-specific factors fall back to a documented default factor when available.
 
+The preferred official source for a static Australia factor is DCCEEW's National Greenhouse Accounts Factors. Time-varying grid emissions intensity may be considered later with sources such as Open Electricity or CSIRO. The repository does not ship verified official factor values.
+
 ## 2026-06-06: Store analytics queries as SQL files
 
 Reusable analytics questions live in `sql/marts/` instead of being embedded only in Python. This keeps SQL visible for review and easier to reuse in dashboards later.

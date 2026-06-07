@@ -53,6 +53,14 @@ make emissions
 
 The included factor is a demo estimate, not an official project-specific emissions factor. Emissions are estimates and should not be treated as carbon accounting compliance results.
 
+## Recommended Factor Sources
+
+The preferred source for static Australia emissions factors is Australia's National Greenhouse Accounts Factors from the Department of Climate Change, Energy, the Environment and Water. DCCEEW states that the NGA Factors provide emissions factors and methods to help estimate greenhouse gas emissions and are revised yearly.
+
+For more advanced time-varying grid emissions intensity, future work can evaluate sources such as Open Electricity or CSIRO. Open Electricity documents emissions as energy generated multiplied by an emissions intensity factor and provides Australian grid emissions data. CSIRO has datasets for consumption-based emissions intensity estimates for National Electricity Market regions.
+
+The project should not invent official values. Users should provide a factor CSV when they want a verified source-specific factor.
+
 ## Next Steps
 
 Implement Feature 12: Weather-normalized energy baseline and efficiency opportunity scoring.

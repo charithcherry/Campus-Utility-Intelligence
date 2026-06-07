@@ -61,6 +61,8 @@ Expected behavior:
 - Fall back deterministically to a clearly labeled default estimate.
 - Document that emissions are estimates, not official carbon accounting results.
 
+Recommended static factor source: Australia's National Greenhouse Accounts Factors from the Department of Climate Change, Energy, the Environment and Water. More advanced time-varying grid emissions intensity can be evaluated later with sources such as Open Electricity or CSIRO, but values should not be invented.
+
 Suggested command remains:
 
 ```bash
