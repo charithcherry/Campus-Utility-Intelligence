@@ -51,6 +51,7 @@ def test_transform_silver_tables_filters_invalid_rows_and_deduplicates(tmp_path)
             """
             INSERT INTO bronze.bronze_building_submeter_consumption VALUES
             (5, 30, 1, '2024-01-01 00:00:00', 4.0, 2.0, 240.0, 1.0, 0.95),
+            (5, 30, 1, '2024-01-01 00:00:00', 4.0, 2.0, 240.0, 1.0, 0.95),
             (NULL, 30, 1, '2024-01-01 00:05:00', 4.0, 2.0, 240.0, 1.0, 0.95)
             """
         )

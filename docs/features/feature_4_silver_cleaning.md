@@ -24,7 +24,7 @@ The silver workflow creates three electricity tables:
 - `silver.silver_nmi_electricity_readings`
 - `silver.silver_submeter_electricity_readings`
 
-Silver filters rows with missing required IDs, timestamps, or consumption values. It also removes negative consumption values and deduplicates repeated meter/timestamp records.
+Silver filters rows with missing required IDs, timestamps, or consumption values. It also removes negative consumption values and deduplicates repeated meter/timestamp records using the normalized output timestamp.
 
 This cleaning is needed because gold metrics and dashboards should not be built from malformed, missing-key, negative, or duplicate electricity readings.
 

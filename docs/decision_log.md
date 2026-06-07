@@ -27,3 +27,5 @@ DuckDB inferred some bronze columns as `VARCHAR` where raw values are mixed. Tha
 Silver cleaning creates separate building, NMI, and submeter electricity tables. The raw sources have different grains and measurement columns, so combining them now would hide source-specific meaning.
 
 Rows with missing required IDs, missing timestamps, missing consumption, or negative consumption are excluded from silver. Repeated meter/timestamp rows are deduplicated with `ROW_NUMBER`.
+
+Submeter deduplication uses the normalized output timestamp because timezone-aware source timestamps can collapse to the same silver timestamp.

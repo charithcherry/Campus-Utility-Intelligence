@@ -136,7 +136,7 @@ def _create_submeter_electricity(connection) -> None:
           AND power IS NOT NULL
           AND power_factor IS NOT NULL
         QUALIFY ROW_NUMBER() OVER (
-            PARTITION BY campus_id, building_id, id, timestamp
+            PARTITION BY campus_id, building_id, id, CAST(timestamp AS TIMESTAMP)
             ORDER BY consumption, power
         ) = 1
         """

@@ -26,3 +26,18 @@ Feature 4 validates silver cleaning with:
 - Transform reports include row counts for each silver table
 
 Silver validation is focused on electricity tables only.
+
+## Automated Quality Report
+
+Feature 5 adds `make quality`, which writes `reports/data_quality_report.md`.
+
+The report checks:
+
+- Row counts are positive
+- Required fields are not null
+- Consumption is non-negative
+- Meter/timestamp keys are unique
+- Timestamp min and max values exist
+- Campus IDs map to `bronze.bronze_campus_meta`
+
+The command exits with an error if any required check fails.

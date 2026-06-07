@@ -27,7 +27,7 @@ transform:
 	$(PYTHON) -m campus_utility.transformations
 
 quality:
-	@echo "Data-quality checks will be implemented in Feature 5."
+	$(PYTHON) -m campus_utility.quality
 
 dashboard:
 	$(VENV)/bin/streamlit run dashboard/app.py
