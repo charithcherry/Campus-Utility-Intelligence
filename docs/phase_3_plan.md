@@ -36,7 +36,7 @@ Current limitation: emissions use a static factor. Same-day peak shifting does n
 ## Recommended Order
 
 1. Feature 16: Time-Varying Carbon Intensity Layer: implemented
-2. Feature 17: Demand-Response Event Simulator: planned
+2. Feature 17: Demand-Response Event Simulator: implemented
 3. Stop for review before considering forecasting, anomaly workbench, or RAG
 
 ## Feature 16: Time-Varying Carbon Intensity Layer
@@ -89,7 +89,7 @@ feat: add time-varying carbon intensity layer
 
 ## Feature 17: Demand-Response Event Simulator
 
-Status: planned.
+Status: implemented.
 
 Goal: simulate whether campus flexible load could meet a grid-event reduction target.
 

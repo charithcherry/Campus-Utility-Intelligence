@@ -95,3 +95,9 @@ Demand-response simulation, forecasting, anomaly investigation, and RAG/SQL copi
 Feature 16 adds the schema and workflow for hourly grid carbon intensity, but it does not invent official hourly intensity values. The default input path is `data/reference/grid_carbon_intensity_hourly.csv`, which is ignored by git so large or licensed source data is not committed.
 
 When no hourly intensity file is present, `gold.gold_hourly_time_varying_emissions` falls back to static DCCEEW factors from `gold.gold_electricity_emissions`. Static DCCEEW emissions and time-varying operational grid-intensity estimates answer different questions, so the project keeps both separate.
+
+## 2026-06-07: Model demand response as offline event simulation
+
+Feature 17 simulates demand-response readiness from existing hourly electricity usage. It estimates event-window reduction, target achievement, rebound load, and energy preservation.
+
+The simulator is peak-only by default and does not claim real-time control, utility program participation, or emissions impact. Emissions impact remains empty unless real time-varying carbon-intensity data is available.

@@ -2,47 +2,45 @@
 
 ## Goal
 
-Plan a simulator that evaluates whether campus flexible load could meet a grid-stress event reduction target.
+Add a simulator that evaluates whether campus flexible load could meet a grid-stress event reduction target.
 
 ## Status
 
-Planned. This feature is not implemented yet.
+Implemented.
 
-## Files Expected To Change
+## Files Changed
 
 - `src/campus_utility/demand_response.py`
-- `src/campus_utility/dashboard_data.py`
-- `dashboard/app.py`
 - `tests/test_demand_response.py`
 - `docs/data_dictionary.md`
 - `docs/decision_log.md`
+- `docs/architecture.md`
 - `docs/features/feature_17_demand_response_event_simulator.md`
 - `README.md`
 - `Makefile`
 
 ## Implementation Details
 
-Expected event inputs:
+Implemented event inputs:
 
 ```text
 event_date
 start_hour
 end_hour
 target_reduction_percent
-target_reduction_kw
-campus_ids
-meter_ids
 flexible_load_percent
 rebound_window_hours
 ```
 
-Expected output table:
+The current CLI implements event date, start/end hour, target reduction percent, flexible load percent, and rebound window. Target-kW mode, campus filtering, and meter filtering can be added later if dashboard or CLI workflows need them.
+
+Output table:
 
 ```text
 gold.gold_demand_response_simulation
 ```
 
-Expected metrics:
+Implemented metrics:
 
 - Baseline event-window load
 - Simulated event-window load
@@ -50,7 +48,7 @@ Expected metrics:
 - Unmet reduction
 - Rebound load after the event
 - Total energy preservation status
-- Estimated emissions impact, if time-varying carbon intensity exists
+- Emissions impact placeholder, left empty unless real time-varying carbon intensity exists
 
 ## Source Context
 
@@ -64,21 +62,39 @@ This project should treat demand response as an offline simulation only.
 
 ## How To Run It
 
-Planned command:
+Command:
 
 ```bash
 make demand-response
 ```
 
-## Tests Or Validation To Perform
+## Tests Or Validation Performed
 
-- Event-window filter test
-- Target reduction calculation test
-- Rebound accounting test
-- Energy preservation test
-- No negative simulated load test
-- Unmet target test
-- Dashboard helper query test
+```bash
+make test
+make lint
+make demand-response
+```
+
+Results:
+
+- `43 passed`
+- Ruff passed
+- `gold.gold_demand_response_simulation`: 81 rows
+- Events meeting target: 81
+- Energy preservation failures: 0
+- Negative load failures: 0
+- Max achieved reduction: 1,746.7860
+
+Automated tests cover:
+
+- Event-window filtering
+- Target reduction calculation
+- Rebound accounting
+- Energy preservation
+- No negative simulated load
+- Unmet target behavior
+- Markdown report output
 
 ## Known Limitations
 
@@ -86,7 +102,9 @@ make demand-response
 - Not real-time grid control.
 - Does not imply utility program participation.
 - Estimated emissions impact should only be calculated when valid emissions factors exist for the event window.
+- Current implementation is peak-only and does not optimize against carbon intensity.
+- Default event parameters are a reproducible example, not a recommendation.
 
 ## Next Steps
 
-Implement after Feature 16 if emissions-aware event simulation is required. It can also be implemented with peak-only demand-response logic first.
+Optional next step: add dashboard views for demand-response readiness or add campus/meter filters to the CLI.

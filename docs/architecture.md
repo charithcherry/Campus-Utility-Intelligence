@@ -65,3 +65,11 @@ Feature 16 adds an optional reference layer for hourly grid carbon intensity.
 The workflow reads a user-provided CSV from `CAMPUS_GRID_CARBON_INTENSITY_PATH`, creates `reference.reference_grid_carbon_intensity_hourly`, and joins it to `gold.gold_hourly_electricity_usage` to create `gold.gold_hourly_time_varying_emissions`.
 
 If no hourly carbon-intensity file is present, the reference table is empty and the gold table uses deterministic static-factor fallback from `gold.gold_electricity_emissions`. This keeps the DCCEEW static emissions workflow as the default while allowing source-dependent operational grid-intensity analysis when valid data exists.
+
+## Demand-Response Event Simulation
+
+Feature 17 creates `gold.gold_demand_response_simulation`.
+
+The simulator models an offline grid-stress event window. It estimates target reduction, achieved reduction, unmet reduction, rebound load after the event, and energy preservation using existing hourly electricity usage.
+
+This is not real-time grid control and does not imply participation in a utility demand-response program. Emissions impact remains unset unless valid time-varying carbon-intensity data is loaded.

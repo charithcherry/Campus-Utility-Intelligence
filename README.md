@@ -2,7 +2,7 @@
 
 Campus Utility Intelligence is a local Python, SQL, DuckDB, and Streamlit analytics project for campus electricity usage data.
 
-Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, optional time-varying emissions comparison, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, peak-shifting simulation, and a local Streamlit dashboard are implemented.
+Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, optional time-varying emissions comparison, SQL analytics queries, NMI/building reconciliation, weather-normalized baseline, peak-shifting simulation, demand-response event simulation, and a local Streamlit dashboard are implemented.
 
 ## What Is Implemented
 
@@ -23,6 +23,7 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Reusable SQL analytics queries with markdown outputs
 - Campus-level NMI versus building usage reconciliation
 - Weather-normalized electricity baseline and high-usage candidate scoring
+- Offline demand-response event simulation for grid-stress target reduction and rebound analysis
 - Multi-page local Streamlit dashboard for executive KPIs, usage patterns, emissions, weather-normalized efficiency, peak-shift simulation, reconciliation, data quality, and methodology notes
 
 ## Project Layout
@@ -145,6 +146,14 @@ make simulate-shift
 
 This creates `gold.gold_peak_shift_simulation` and writes `reports/peak_shift_report.md`.
 
+Run demand-response event simulation:
+
+```bash
+make demand-response
+```
+
+This creates `gold.gold_demand_response_simulation` and writes `reports/demand_response_report.md`. The default simulation is offline and peak-only; it does not claim real-time control or utility program participation.
+
 Build optional time-varying emissions comparison:
 
 ```bash
@@ -185,7 +194,7 @@ The profiling workflow currently supports `.csv`, `.json`, `.jsonl`, and `.parqu
 
 ## Known Limitations
 
-Estimated emissions use configurable reference factors. The included factor is an official DCCEEW Victoria Scope 2 electricity factor, but it should still be reviewed before formal reporting. Time-varying emissions require user-provided hourly carbon-intensity data and are source-dependent. The dashboard is local only and is not deployed.
+Estimated emissions use configurable reference factors. The included factor is an official DCCEEW Victoria Scope 2 electricity factor, but it should still be reviewed before formal reporting. Time-varying emissions require user-provided hourly carbon-intensity data and are source-dependent. Demand-response output is an offline simulation, not real-time grid control. The dashboard is local only and is not deployed.
 
 ## Final Review
 
@@ -195,4 +204,4 @@ See `docs/final_review.md` for the first end-to-end validation summary. See `doc
 
 See `docs/phase_3_plan.md` for planned grid-aware decision-support work.
 
-Recommended next feature: demand-response event simulation. It is planned only and is not implemented yet.
+Optional next features are forecasting, anomaly investigation, or dashboard integration for demand-response outputs.

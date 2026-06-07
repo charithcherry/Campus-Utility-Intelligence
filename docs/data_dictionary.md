@@ -75,6 +75,7 @@ Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, 
 | `gold.gold_monthly_nmi_building_reconciliation` | Campus and month | Monthly NMI usage compared with summed building usage |
 | `gold.gold_weather_normalized_usage` | Campus, source, meter, optional building, and hour | Actual vs expected usage after weather/time normalization |
 | `gold.gold_peak_shift_simulation` | Campus, source, meter, optional building, date, and scenario | Offline same-day peak-shift simulation |
+| `gold.gold_demand_response_simulation` | Campus, source, meter, optional building, and event | Offline grid-stress event simulation |
 
 Reconciliation columns include NMI consumption, building consumption, absolute difference, and difference ratio to NMI. They do not identify the physical cause of the difference.
 
@@ -105,6 +106,30 @@ The local dashboard reads from gold usage, peak-demand, emissions, reconciliatio
 | `peak_reduction_percent` | Peak reduction divided by baseline peak hourly consumption |
 | `total_energy_preserved` | Whether daily energy is preserved |
 | `negative_usage_created` | Whether simulation created invalid negative usage |
+
+## Demand-Response Simulation Columns
+
+| Column | Meaning |
+| --- | --- |
+| `event_date` | Simulated grid-event date |
+| `start_hour` | Event start hour |
+| `end_hour` | Event end hour |
+| `event_duration_hours` | Number of event-window hours |
+| `target_reduction_percent` | Requested reduction as a share of event-window usage |
+| `flexible_load_percent` | Flexible share of event-window usage |
+| `baseline_event_consumption` | Original usage during the event window |
+| `simulated_event_consumption` | Usage after simulated reduction during the event window |
+| `target_reduction` | Requested reduction amount |
+| `achieved_reduction` | Simulated achieved reduction amount |
+| `unmet_reduction` | Target amount not achieved |
+| `target_met` | Whether achieved reduction met or exceeded target |
+| `baseline_rebound_consumption` | Original usage in the rebound window after the event |
+| `simulated_rebound_consumption` | Rebound-window usage after shifted load is added back |
+| `rebound_load` | Load shifted into the rebound window |
+| `total_energy_preserved` | Whether event plus rebound energy is preserved |
+| `negative_load_created` | Whether simulation created invalid negative load |
+| `estimated_emissions_impact_kg_co2e` | Reserved for future use when real time-varying carbon intensity exists |
+| `simulation_version` | Simulation method identifier |
 
 ## Emissions Factor Reference
 
