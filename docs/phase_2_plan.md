@@ -145,6 +145,36 @@ Suggested commit:
 feat: extend dashboard with efficiency and simulation views
 ```
 
+## Feature 15: Dashboard Visualization Polish
+
+Goal: improve the Streamlit dashboard presentation so it reads like an energy intelligence product without adding new backend pipeline tables.
+
+Status: planned after Phase 2 final review. This is not implemented yet.
+
+Expected behavior:
+
+- Add sidebar navigation.
+- Add an executive overview page.
+- Add usage-pattern charts.
+- Add weather-normalized efficiency charts.
+- Add peak-shift scenario comparison charts.
+- Add data quality and trust views.
+- Add concise insight captions and assumption notes.
+- Keep the static-emissions-factor limitation clear.
+- Avoid claiming emissions reduction from same-day peak shifting.
+
+Suggested command:
+
+```bash
+make dashboard
+```
+
+Suggested commit:
+
+```text
+feat: polish dashboard visualizations
+```
+
 ## Phase 2 Final Review
 
 After Features 11 to 14, run:

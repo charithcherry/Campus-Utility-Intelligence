@@ -174,11 +174,8 @@ Estimated emissions use configurable reference factors. The included factor is a
 
 See `docs/final_review.md` for the first end-to-end validation summary. See `docs/final_review_phase_2.md` for the completed Phase 2 validation summary, decision-support outputs, limitations, and resume alignment.
 
-## Phase 2 Plan
+## Future Work
 
-See `docs/phase_2_plan.md` for the next sustainability intelligence features:
+See `docs/phase_2_plan.md` and `docs/features/feature_15_dashboard_visualization_polish.md` for planned dashboard polish.
 
-- Australia-aware emissions factor reference data
-- Weather-normalized energy baseline
-- Peak-shifting simulator
-- Dashboard extensions
+Planned next improvement: a multi-page dashboard with executive KPIs, usage-pattern heatmaps, weather-normalized efficiency charts, peak-shift scenario comparisons, data-quality views, and clearer insight captions. This is planned work, not implemented yet.
