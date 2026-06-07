@@ -61,3 +61,11 @@ Feature 7 validates emissions calculations with unit tests that confirm:
 Feature 8 validates that SQL files can run against DuckDB and write markdown outputs.
 
 The real `make analytics` run should happen after `make metrics` and `make emissions`.
+
+## Reconciliation Validation
+
+Feature 9 validates NMI/building reconciliation with unit tests that confirm:
+
+- Daily NMI and building totals are compared by campus and date
+- Difference and ratio-to-NMI calculations are correct
+- Reconciliation reports are generated

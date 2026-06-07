@@ -33,3 +33,9 @@ Gold tables aggregate silver readings into hourly, daily, and monthly usage. Pea
 Feature 8 stores reusable SQL report queries under `sql/marts/`.
 
 The analytics runner executes those queries against DuckDB and writes markdown outputs under `reports/sql_analytics/`.
+
+## Reconciliation
+
+Feature 9 compares campus-level NMI electricity totals against summed campus-level building meter totals.
+
+This is a diagnostic layer for source alignment. It does not assume NMI and building readings should always match.

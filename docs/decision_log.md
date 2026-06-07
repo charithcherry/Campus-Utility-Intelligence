@@ -45,3 +45,9 @@ The default value is `0.79` kg CO2e per usage unit. This is treated as a configu
 ## 2026-06-06: Store analytics queries as SQL files
 
 Reusable analytics questions live in `sql/marts/` instead of being embedded only in Python. This keeps SQL visible for review and easier to reuse in dashboards later.
+
+## 2026-06-06: Reconcile NMI and building usage at campus level
+
+NMI readings include `campus_id` and `meter_id`, but not `building_id`. Reconciliation compares campus-level NMI totals against summed campus-level building meter totals.
+
+Differences are treated as diagnostics, not automatic corruption, because NMI and building meters may have different coverage.

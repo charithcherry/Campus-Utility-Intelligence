@@ -2,7 +2,7 @@
 
 Campus Utility Intelligence is a local Python, SQL, DuckDB, and Streamlit analytics project for campus electricity usage data.
 
-Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, and SQL analytics queries are implemented. Dashboard views are planned future features.
+Current status: project setup, Kaggle download, raw profiling, bronze ingestion, silver electricity cleaning, data-quality checks, gold electricity metrics, estimated emissions metrics, SQL analytics queries, and NMI/building reconciliation are implemented. Dashboard views are planned future features.
 
 ## What Is Implemented
 
@@ -20,6 +20,7 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Gold usage and peak-demand metric tables
 - Estimated electricity emissions metric table
 - Reusable SQL analytics queries with markdown outputs
+- Campus-level NMI versus building usage reconciliation
 
 ## Project Layout
 
@@ -108,6 +109,14 @@ make analytics
 ```
 
 This writes query outputs to `reports/sql_analytics/` and an index at `reports/sql_analytics_report.md`.
+
+Reconcile NMI and building usage:
+
+```bash
+make reconcile
+```
+
+This creates reconciliation tables and writes `reports/reconciliation_report.md`.
 
 Download the UNICON dataset from Kaggle:
 
