@@ -78,6 +78,16 @@ Feature 12 validates the weather baseline with tests that confirm:
 - Residual consumption and residual percent are calculated
 - High-usage candidate flags and opportunity scores are calculated
 
+## Peak Shift Simulation Validation
+
+Feature 13 validates the peak-shifting simulator with tests that confirm:
+
+- Total daily energy is preserved
+- Simulated usage does not go negative
+- Peak hourly consumption is reduced when a feasible target hour exists
+- Shift targets stay within the same day and max shift window
+- Reports clearly state static-factor emissions limitations
+
 ## Reconciliation Validation
 
 Feature 9 validates NMI/building reconciliation with unit tests that confirm:

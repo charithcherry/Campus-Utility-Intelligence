@@ -2,7 +2,7 @@ VENV ?= .venv
 PYTHON ?= $(VENV)/bin/python
 SYSTEM_PYTHON ?= python3.12
 
-.PHONY: install test lint download-data profile ingest transform quality metrics emissions analytics reconcile baseline dashboard clean
+.PHONY: install test lint download-data profile ingest transform quality metrics emissions analytics reconcile baseline simulate-shift dashboard clean
 
 install:
 	$(SYSTEM_PYTHON) -m venv $(VENV)
@@ -43,6 +43,9 @@ reconcile:
 
 baseline:
 	$(PYTHON) -m campus_utility.weather_baseline
+
+simulate-shift:
+	$(PYTHON) -m campus_utility.peak_shift
 
 dashboard:
 	$(VENV)/bin/streamlit run dashboard/app.py

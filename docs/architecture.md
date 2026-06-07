@@ -51,3 +51,9 @@ The dashboard uses the existing gold outputs for usage trends, peak demand, esti
 Feature 12 joins hourly electricity usage to campus weather and creates `gold.gold_weather_normalized_usage`.
 
 The model is an explainable grouped median baseline by campus, source, meter, optional building, hour, day of week, month, and temperature band.
+
+## Peak-Shifting Simulation
+
+Feature 13 creates `gold.gold_peak_shift_simulation`.
+
+The simulator shifts configurable flexible load from peak hourly consumption to lower same-day hourly consumption within each campus/source/meter/building group. It preserves total daily energy and does not claim emissions reduction under the current static emissions factor.

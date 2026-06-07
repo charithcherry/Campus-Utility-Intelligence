@@ -136,6 +136,14 @@ make baseline
 
 This creates `gold.gold_weather_normalized_usage` and writes `reports/weather_baseline_report.md`.
 
+Run peak-shifting simulation:
+
+```bash
+make simulate-shift
+```
+
+This creates `gold.gold_peak_shift_simulation` and writes `reports/peak_shift_report.md`.
+
 Download the UNICON dataset from Kaggle:
 
 ```bash

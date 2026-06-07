@@ -58,6 +58,12 @@ Feature 12 uses an explainable grouped median baseline instead of a black-box mo
 
 High-usage candidates are investigation leads, not confirmed waste, faults, or savings.
 
+## 2026-06-07: Treat peak shifting as an offline peak-consumption simulation
+
+Feature 13 uses hourly consumption as a peak-load proxy and shifts load only within the same day and same campus/source/meter/building group.
+
+Because the project uses a static DCCEEW Victoria Scope 2 emissions factor, preserved daily kWh means estimated emissions remain unchanged. The simulator does not claim emissions reduction.
+
 ## 2026-06-06: Store analytics queries as SQL files
 
 Reusable analytics questions live in `sql/marts/` instead of being embedded only in Python. This keeps SQL visible for review and easier to reuse in dashboards later.

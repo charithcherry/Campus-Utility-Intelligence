@@ -73,6 +73,7 @@ Common normalized columns include `campus_id`, `meter_id`, `reading_timestamp`, 
 | `gold.gold_daily_nmi_building_reconciliation` | Campus and date | Daily NMI usage compared with summed building usage |
 | `gold.gold_monthly_nmi_building_reconciliation` | Campus and month | Monthly NMI usage compared with summed building usage |
 | `gold.gold_weather_normalized_usage` | Campus, source, meter, optional building, and hour | Actual vs expected usage after weather/time normalization |
+| `gold.gold_peak_shift_simulation` | Campus, source, meter, optional building, date, and scenario | Offline same-day peak-shift simulation |
 
 Reconciliation columns include NMI consumption, building consumption, absolute difference, and difference ratio to NMI. They do not identify the physical cause of the difference.
 
@@ -91,6 +92,18 @@ The local dashboard reads from gold usage, peak-demand, emissions, and reconcili
 | `is_high_usage_candidate` | Flag for records at least 25% above expected usage |
 | `efficiency_opportunity_score` | Bounded score from positive residual percent |
 | `baseline_model_version` | Baseline method identifier |
+
+## Peak Shift Simulation Columns
+
+| Column | Meaning |
+| --- | --- |
+| `flexible_load_percent` | Requested flexible portion of peak-hour load |
+| `baseline_peak_consumption` | Original peak hourly consumption |
+| `simulated_peak_consumption` | Peak-hour consumption after shifting |
+| `peak_reduction` | Difference between baseline and simulated peak hourly consumption |
+| `peak_reduction_percent` | Peak reduction divided by baseline peak hourly consumption |
+| `total_energy_preserved` | Whether daily energy is preserved |
+| `negative_usage_created` | Whether simulation created invalid negative usage |
 
 ## Emissions Factor Reference
 
