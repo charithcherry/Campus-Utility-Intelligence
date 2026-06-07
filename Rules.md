@@ -26,6 +26,14 @@
    * What commands were run
    * What output or result was produced
    * A simple example when helpful
+8. Explanations should be short paragraphs by default, not long bullet-heavy responses, unless the topic needs more detail. Use a simple structure when useful:
+
+   * Explanation
+   * Files changed
+   * Commands run
+   * Outcome
+   * What happened to the data
+   * Next step
 
 ## Agent Workflow
 
