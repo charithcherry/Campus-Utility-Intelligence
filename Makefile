@@ -1,0 +1,33 @@
+VENV ?= .venv
+PYTHON ?= $(VENV)/bin/python
+SYSTEM_PYTHON ?= python3.12
+
+.PHONY: install test lint profile ingest transform quality dashboard clean
+
+install:
+	$(SYSTEM_PYTHON) -m venv $(VENV)
+	$(PYTHON) -m pip install -e ".[dev]"
+
+test:
+	$(PYTHON) -m pytest
+
+lint:
+	$(PYTHON) -m ruff check src tests dashboard
+
+profile:
+	@echo "Profiling workflow will be implemented in Feature 2."
+
+ingest:
+	@echo "Bronze ingestion workflow will be implemented in Feature 3."
+
+transform:
+	@echo "Silver and gold transformation workflow will be implemented in later features."
+
+quality:
+	@echo "Data-quality checks will be implemented in Feature 5."
+
+dashboard:
+	$(VENV)/bin/streamlit run dashboard/app.py
+
+clean:
+	rm -rf .pytest_cache .ruff_cache htmlcov
