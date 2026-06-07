@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import streamlit as st
 
+from campus_utility.copilot import answer_question
 from campus_utility.config import get_config
 from campus_utility.dashboard_data import (
     get_filter_options,
@@ -69,6 +72,7 @@ pages = [
     "Weather-Normalized Efficiency",
     "Peak-Shifting Simulator",
     "Grid Event Readiness",
+    "Analytics Copilot",
     "NMI/Building Reconciliation",
     "Data Quality",
     "Methodology and Assumptions",
@@ -318,6 +322,34 @@ elif page == "Grid Event Readiness":
         st.dataframe(top_results, width="stretch", hide_index=True)
     else:
         st.info("Demand-response simulation table not found. Run `make demand-response`.")
+
+elif page == "Analytics Copilot":
+    st.subheader("Analytics Copilot")
+    st.caption(
+        "Documentation-aware copilot with safe read-only DuckDB queries. "
+        "Raw meter rows are not embedded. Gemini is used only when `GEMINI_API_KEY` is configured."
+    )
+    question = st.text_input(
+        "Ask about docs or metrics",
+        placeholder="How many demand-response scenarios met the target?",
+    )
+    if st.button("Ask", type="primary") and question.strip():
+        response = answer_question(question, Path("."), config.db_path)
+        if response.used_model:
+            st.caption(f"Model: {response.used_model}")
+        st.markdown(response.answer)
+
+        if response.sql:
+            st.markdown("#### SQL used")
+            st.code(response.sql, language="sql")
+        if response.data is not None:
+            st.markdown("#### Result preview")
+            st.dataframe(response.data, width="stretch", hide_index=True)
+        if response.sources:
+            st.markdown("#### Retrieved sources")
+            for source in response.sources:
+                st.markdown(f"- `{source.source_path}` / {source.heading}")
+                st.caption(source.text[:500])
 
 elif page == "NMI/Building Reconciliation":
     st.subheader("NMI/Building Reconciliation")

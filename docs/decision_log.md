@@ -101,3 +101,9 @@ When no hourly intensity file is present, `gold.gold_hourly_time_varying_emissio
 Feature 17 simulates demand-response readiness from existing hourly electricity usage. It estimates event-window reduction, target achievement, rebound load, and energy preservation.
 
 The simulator is peak-only by default and does not claim real-time control, utility program participation, or emissions impact. Emissions impact remains empty unless real time-varying carbon-intensity data is available.
+
+## 2026-06-07: Keep copilot grounded in docs and safe SQL
+
+Feature 19 adds an analytics copilot, but it does not embed raw meter rows or execute arbitrary SQL. Documentation questions use retrieved project docs. Metric questions use predefined read-only SQL routes and the SQL safety layer blocks mutating statements.
+
+Gemini is optional and configured only through environment variables. API keys must stay out of git. If Gemini is unavailable, the copilot still returns local extractive answers and SQL result previews.

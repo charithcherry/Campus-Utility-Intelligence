@@ -73,3 +73,11 @@ Feature 17 creates `gold.gold_demand_response_simulation`.
 The simulator models an offline grid-stress event window. It estimates target reduction, achieved reduction, unmet reduction, rebound load after the event, and energy preservation using existing hourly electricity usage.
 
 This is not real-time grid control and does not imply participation in a utility demand-response program. Emissions impact remains unset unless valid time-varying carbon-intensity data is loaded.
+
+## Analytics Copilot
+
+Feature 19 adds a documentation-aware analytics copilot.
+
+The copilot retrieves project knowledge from README, docs, feature notes, final reviews, and local markdown reports when present. It does not embed raw meter rows. Metric questions are answered through predefined safe read-only DuckDB SQL routes.
+
+Gemini can summarize retrieved snippets or SQL result previews when `GEMINI_API_KEY` is configured. Without a key, the copilot returns local extractive answers.

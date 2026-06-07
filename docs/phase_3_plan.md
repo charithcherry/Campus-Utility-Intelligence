@@ -38,7 +38,8 @@ Current limitation: emissions use a static factor. Same-day peak shifting does n
 1. Feature 16: Time-Varying Carbon Intensity Layer: implemented
 2. Feature 17: Demand-Response Event Simulator: implemented
 3. Feature 18: Demand-Response Dashboard and Scenario Polish: implemented
-4. Stop for Final Review Phase 3 before considering forecasting, anomaly workbench, or RAG
+4. Feature 19: Documentation-Aware Analytics Copilot: implemented
+5. Stop for review before considering forecasting or anomaly workbench
 
 ## Feature 16: Time-Varying Carbon Intensity Layer
 
@@ -160,7 +161,34 @@ Suggested commit:
 feat: add demand-response dashboard views
 ```
 
-## Feature 19: Forecasting And Peak-Risk Alerts
+## Feature 19: Documentation-Aware Analytics Copilot
+
+Status: implemented.
+
+Goal: answer project documentation and metric questions using docs retrieval plus safe read-only DuckDB SQL.
+
+Implemented behavior:
+
+- Indexes README, docs, feature notes, final reviews, and local generated markdown reports when present.
+- Does not embed raw meter rows.
+- Routes supported metric questions to safe read-only SQL.
+- Blocks unsafe SQL.
+- Adds an `Analytics Copilot` dashboard page.
+- Uses Gemini through `GEMINI_API_KEY` and `GEMINI_MODEL` when configured; otherwise returns local extractive answers.
+
+Command:
+
+```bash
+make copilot-check
+```
+
+Suggested commit:
+
+```text
+feat: add documentation-aware analytics copilot
+```
+
+## Feature 20: Forecasting And Peak-Risk Alerts
 
 Status: planned.
 
@@ -195,7 +223,7 @@ Suggested commit:
 feat: add peak-risk forecasting baseline
 ```
 
-## Feature 20: Energy Anomaly Investigation
+## Feature 21: Energy Anomaly Investigation
 
 Status: planned.
 
@@ -231,28 +259,6 @@ Suggested commit:
 ```text
 feat: add anomaly investigation workflow
 ```
-
-## Optional Later Feature: RAG And SQL Copilot
-
-Status: optional future work after Feature 16 or Feature 17.
-
-Goal: answer project questions using docs, reports, and read-only DuckDB SQL.
-
-Expected behavior:
-
-- Build retrieval over README, docs, data dictionary, validation reports, and final reviews.
-- Add read-only SQL access to DuckDB for metric questions.
-- Do not embed raw electricity rows.
-- Cite docs and SQL outputs in answers.
-- Validate generated SQL before execution.
-
-Good questions:
-
-- How are emissions calculated?
-- Which campus had the highest peak demand?
-- Why does same-day shifting not reduce emissions under a static factor?
-- Show top high-usage candidates.
-- What assumptions are used in the weather baseline?
 
 ## Target Resume Claim After Features 16 And 17
 
