@@ -79,7 +79,7 @@ Reconciliation columns include NMI consumption, building consumption, absolute d
 
 ## Dashboard Views
 
-The local dashboard reads from gold usage, peak-demand, emissions, and reconciliation tables. It does not create new data tables.
+The local dashboard reads from gold usage, peak-demand, emissions, reconciliation, weather baseline, and peak-shift simulation tables. It does not create new data tables.
 
 ## Weather Baseline Columns
 

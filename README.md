@@ -22,7 +22,7 @@ Current status: project setup, Kaggle download, raw profiling, bronze ingestion,
 - Reusable SQL analytics queries with markdown outputs
 - Campus-level NMI versus building usage reconciliation
 - Weather-normalized electricity baseline and high-usage candidate scoring
-- Local Streamlit dashboard for usage, peak demand, emissions, and reconciliation
+- Local Streamlit dashboard for usage, peak demand, emissions, reconciliation, weather baseline, and peak-shift simulation
 
 ## Project Layout
 
@@ -143,6 +143,14 @@ make simulate-shift
 ```
 
 This creates `gold.gold_peak_shift_simulation` and writes `reports/peak_shift_report.md`.
+
+Open the local dashboard:
+
+```bash
+make dashboard
+```
+
+The dashboard includes usage, peak demand, emissions assumptions, NMI/building reconciliation, weather-normalized high-usage candidates, and peak-shifting simulation views.
 
 Download the UNICON dataset from Kaggle:
 

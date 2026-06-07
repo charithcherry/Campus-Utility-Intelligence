@@ -64,6 +64,10 @@ Feature 13 uses hourly consumption as a peak-load proxy and shifts load only wit
 
 Because the project uses a static DCCEEW Victoria Scope 2 emissions factor, preserved daily kWh means estimated emissions remain unchanged. The simulator does not claim emissions reduction.
 
+## 2026-06-07: Dashboard labels estimates and simulations explicitly
+
+Feature 14 extends the local dashboard with Phase 2 outputs. The dashboard labels emissions as estimated Scope 2 values, weather baseline high-usage rows as investigation candidates, and peak shifting as an offline simulation.
+
 ## 2026-06-06: Store analytics queries as SQL files
 
 Reusable analytics questions live in `sql/marts/` instead of being embedded only in Python. This keeps SQL visible for review and easier to reuse in dashboards later.
