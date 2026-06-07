@@ -103,6 +103,12 @@ make emissions
 
 This creates `gold.gold_electricity_emissions` and writes `reports/emissions_metrics_report.md`.
 
+By default, emissions factors are loaded from `data/reference/emissions_factors_example.csv`. Override this with:
+
+```bash
+CAMPUS_EMISSIONS_FACTORS_PATH=/path/to/factors.csv make emissions
+```
+
 Run SQL analytics queries:
 
 ```bash
@@ -141,7 +147,7 @@ The profiling workflow currently supports `.csv`, `.json`, `.jsonl`, and `.parqu
 
 ## Known Limitations
 
-Estimated emissions use a configurable factor and should be replaced if an official project-specific factor is required. The dashboard is local only and is not deployed.
+Estimated emissions use configurable reference factors. The included factor is a demo estimate and should be replaced if an official project-specific factor is required. The dashboard is local only and is not deployed.
 
 ## Final Review
 

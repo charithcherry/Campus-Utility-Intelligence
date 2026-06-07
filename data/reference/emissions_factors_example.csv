@@ -1,0 +1,2 @@
+factor_id,country,region,source_system,energy_type,factor_year,emissions_factor_kg_co2e_per_kwh,factor_source_name,factor_source_url,is_default,notes
+demo_au_electricity_2024,Australia,Australia,*,electricity,2024,0.79,Demo estimate,,true,Demo fallback estimate for local analytics only; replace with an official region/year factor before using for formal reporting.

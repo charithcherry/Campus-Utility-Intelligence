@@ -56,6 +56,13 @@ Feature 7 validates emissions calculations with unit tests that confirm:
 - The configured emissions factor is stored on each row
 - Estimated emissions equal usage multiplied by the factor
 
+Feature 11 extends emissions validation to cover:
+
+- Required factor reference columns
+- Source-specific factor selection
+- Default factor fallback behavior
+- Factor metadata in the gold emissions output
+
 ## SQL Analytics Validation
 
 Feature 8 validates that SQL files can run against DuckDB and write markdown outputs.

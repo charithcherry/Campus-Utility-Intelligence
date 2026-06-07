@@ -14,6 +14,8 @@ venv/
 data/raw/
 data/interim/
 data/processed/
+!data/reference/
+!data/reference/*.csv
 reports/
 *.duckdb
 *.duckdb.wal

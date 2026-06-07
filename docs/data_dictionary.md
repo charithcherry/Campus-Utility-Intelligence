@@ -79,6 +79,26 @@ Reconciliation columns include NMI consumption, building consumption, absolute d
 
 The local dashboard reads from gold usage, peak-demand, emissions, and reconciliation tables. It does not create new data tables.
 
+## Emissions Factor Reference
+
+`reference.reference_emissions_factors` is loaded from CSV during `make emissions`.
+
+| Column | Meaning |
+| --- | --- |
+| `factor_id` | Stable factor identifier |
+| `country` | Factor country |
+| `region` | Factor region |
+| `source_system` | Matching source system or `*` wildcard |
+| `energy_type` | Energy type, currently electricity |
+| `factor_year` | Factor year |
+| `emissions_factor_kg_co2e_per_kwh` | Emissions factor value |
+| `factor_source_name` | Human-readable source name |
+| `factor_source_url` | Source URL, if available |
+| `is_default` | Whether this is a fallback/default factor |
+| `notes` | Factor limitations or assumptions |
+
+`gold.gold_electricity_emissions` stores the selected factor metadata on each emissions row.
+
 ## SQL Analytics Outputs
 
 | Query | Purpose |
