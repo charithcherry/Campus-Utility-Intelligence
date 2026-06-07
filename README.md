@@ -146,3 +146,12 @@ Estimated emissions use a configurable factor and should be replaced if an offic
 ## Final Review
 
 See `docs/final_review.md` for the end-to-end validation summary, data outcomes, known limitations, and resume alignment.
+
+## Phase 2 Plan
+
+See `docs/phase_2_plan.md` for the next sustainability intelligence features:
+
+- Australia-aware emissions factor reference data
+- Weather-normalized energy baseline
+- Carbon-aware peak-shifting simulator
+- Dashboard extensions

@@ -92,6 +92,10 @@ The project now supports this claim:
 - Weather, water, and gas are profiled and ingested but not modeled into analytics marts.
 - Forecasting and cloud deployment are not implemented.
 
+## Next Phase
+
+Phase 2 is documented in `docs/phase_2_plan.md`. It should start with Feature 11: Australia-aware emissions factor support.
+
 ## Git Review
 
 Work was committed feature by feature. Raw data, generated reports, DuckDB files, caches, and virtual environments remain ignored by git.
