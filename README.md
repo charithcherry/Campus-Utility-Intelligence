@@ -176,6 +176,6 @@ See `docs/final_review.md` for the first end-to-end validation summary. See `doc
 
 ## Future Work
 
-See `docs/phase_2_plan.md` and `docs/features/feature_15_dashboard_visualization_polish.md` for the dashboard polish notes.
+See `docs/phase_3_plan.md` for planned grid-aware decision-support work.
 
-Optional next improvement: add Plotly/Altair charts, dashboard screenshots, and a queryable data-quality result table.
+Recommended next feature: time-varying carbon intensity, followed by demand-response event simulation. These are planned only and are not implemented yet.

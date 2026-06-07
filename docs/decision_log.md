@@ -83,3 +83,9 @@ The dataset can quantify NMI/building differences, but it cannot directly attrib
 ## 2026-06-06: Keep dashboard local
 
 The dashboard runs locally with Streamlit and reads from the DuckDB warehouse. It is not deployed and does not claim real-time refresh.
+
+## 2026-06-07: Plan grid-aware future work separately
+
+Features 16 and later are documented as planned Phase 3 work, not implemented functionality. The recommended next layer is time-varying carbon intensity because the current DCCEEW emissions workflow is static.
+
+Demand-response simulation, forecasting, anomaly investigation, and RAG/SQL copilot work are also treated as future options. The project should not claim real-time optimization, carbon-aware shifting, demand-response readiness, forecasting, anomaly root cause, or RAG capability until those features are implemented and validated.
