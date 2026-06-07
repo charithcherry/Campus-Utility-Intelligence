@@ -26,6 +26,8 @@ The silver workflow creates three electricity tables:
 
 Silver filters rows with missing required IDs, timestamps, or consumption values. It also removes negative consumption values and deduplicates repeated meter/timestamp records.
 
+This cleaning is needed because gold metrics and dashboards should not be built from malformed, missing-key, negative, or duplicate electricity readings.
+
 ## How To Run It
 
 ```bash

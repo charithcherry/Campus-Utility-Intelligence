@@ -31,6 +31,8 @@ The feature also adds a Kaggle download command for the UNICON dataset slug `cda
 
 The downloaded raw dataset contains 11 CSV files and uses about 907 MB locally.
 
+This feature exists to inspect the real data before making schema or cleaning assumptions.
+
 ## How To Run It
 
 Place Kaggle UNICON files under `data/raw/`, then run:

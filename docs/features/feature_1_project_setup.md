@@ -28,6 +28,8 @@ The feature adds the initial repository layout, Python package metadata, local c
 
 Raw data, generated databases, reports, caches, virtual environments, and local environment files are gitignored.
 
+This setup was needed so later data work has repeatable commands, clear folders, ignored local artifacts, and a tested Python package structure.
+
 ## How To Run It
 
 Install dependencies:

@@ -22,6 +22,8 @@ Bronze table names use the source filename with a `bronze_` prefix. For example,
 
 The workflow drops and recreates each bronze table on every run so ingestion is repeatable.
 
+Bronze exists to make raw files queryable in SQL while keeping source data mostly unchanged. Cleaning is intentionally deferred to silver.
+
 ## How To Run It
 
 ```bash
